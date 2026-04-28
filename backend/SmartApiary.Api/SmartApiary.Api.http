@@ -1,0 +1,23 @@
+@SmartApiary.Api_HostAddress = http://localhost:5099
+
+### Insert telemetry
+POST {{SmartApiary.Api_HostAddress}}/api/telemetry
+Content-Type: application/json
+Accept: application/json
+
+{
+  "hiveId": "hive-1",
+  "timestamp": "2026-04-28T10:00:00Z",
+  "weight": 42.5,
+  "temperature": 33.2,
+  "humidity": 58.1,
+  "batteryLevel": 87.0
+}
+
+###
+
+### Get telemetry by hive
+GET {{SmartApiary.Api_HostAddress}}/api/telemetry/hive-1
+Accept: application/json
+
+###
