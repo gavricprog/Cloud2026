@@ -1,0 +1,6 @@
+@SmartApiary.API_HostAddress = http://localhost:5111
+
+GET {{SmartApiary.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

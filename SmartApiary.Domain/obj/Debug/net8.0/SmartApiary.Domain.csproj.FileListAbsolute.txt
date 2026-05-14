@@ -1,0 +1,12 @@
+C:\Users\Bogdan\source\repos\CloudProjekat\SmartApiary.Domain\bin\Debug\net8.0\SmartApiary.Domain.deps.json
+C:\Users\Bogdan\source\repos\CloudProjekat\SmartApiary.Domain\bin\Debug\net8.0\SmartApiary.Domain.dll
+C:\Users\Bogdan\source\repos\CloudProjekat\SmartApiary.Domain\bin\Debug\net8.0\SmartApiary.Domain.pdb
+C:\Users\Bogdan\source\repos\CloudProjekat\SmartApiary.Domain\obj\Debug\net8.0\SmartApiary.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Bogdan\source\repos\CloudProjekat\SmartApiary.Domain\obj\Debug\net8.0\SmartApiary.Domain.AssemblyInfoInputs.cache
+C:\Users\Bogdan\source\repos\CloudProjekat\SmartApiary.Domain\obj\Debug\net8.0\SmartApiary.Domain.AssemblyInfo.cs
+C:\Users\Bogdan\source\repos\CloudProjekat\SmartApiary.Domain\obj\Debug\net8.0\SmartApiary.Domain.csproj.CoreCompileInputs.cache
+C:\Users\Bogdan\source\repos\CloudProjekat\SmartApiary.Domain\obj\Debug\net8.0\SmartApiary.Domain.sourcelink.json
+C:\Users\Bogdan\source\repos\CloudProjekat\SmartApiary.Domain\obj\Debug\net8.0\SmartApiary.Domain.dll
+C:\Users\Bogdan\source\repos\CloudProjekat\SmartApiary.Domain\obj\Debug\net8.0\refint\SmartApiary.Domain.dll
+C:\Users\Bogdan\source\repos\CloudProjekat\SmartApiary.Domain\obj\Debug\net8.0\SmartApiary.Domain.pdb
+C:\Users\Bogdan\source\repos\CloudProjekat\SmartApiary.Domain\obj\Debug\net8.0\ref\SmartApiary.Domain.dll
