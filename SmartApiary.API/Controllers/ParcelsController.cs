@@ -10,7 +10,7 @@ namespace SmartApiary.API.Controllers;
 
 [ApiController]
 [Route("api/parcels")]
-[Authorize(Roles = "Farmer")]
+[Authorize]
 public class ParcelsController : ControllerBase
 {
     private readonly AppDbContext _db;
@@ -23,6 +23,7 @@ public class ParcelsController : ControllerBase
     private Guid CurrentUserId => Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
     [HttpGet]
+    [Authorize(Roles = "Farmer")]
     public async Task<IActionResult> GetAll()
     {
         var parcels = await _db.Parcels
@@ -49,6 +50,7 @@ public class ParcelsController : ControllerBase
     }
 
     [HttpGet("{id:guid}")]
+    [Authorize(Roles = "Farmer")]
     public async Task<IActionResult> GetById(Guid id)
     {
         var parcel = await _db.Parcels
@@ -75,6 +77,7 @@ public class ParcelsController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "Farmer")]
     public async Task<IActionResult> Create([FromBody] CreateParcelRequest request)
     {
         var parcel = new Parcel
@@ -100,6 +103,7 @@ public class ParcelsController : ControllerBase
     }
 
     [HttpPut("{id:guid}")]
+    [Authorize(Roles = "Farmer")]
     public async Task<IActionResult> Update(Guid id, [FromBody] UpdateParcelRequest request)
     {
         var parcel = await _db.Parcels.FirstOrDefaultAsync(p => p.Id == id && p.FarmerId == CurrentUserId);
@@ -113,6 +117,7 @@ public class ParcelsController : ControllerBase
     }
 
     [HttpPut("{id:guid}/crop")]
+    [Authorize(Roles = "Farmer")]
     public async Task<IActionResult> SetCrop(Guid id, [FromBody] SetCropRequest request)
     {
         var parcel = await _db.Parcels
@@ -145,6 +150,7 @@ public class ParcelsController : ControllerBase
     }
 
     [HttpDelete("{id:guid}/crop")]
+    [Authorize(Roles = "Farmer")]
     public async Task<IActionResult> DeleteCrop(Guid id)
     {
         var parcel = await _db.Parcels
@@ -159,7 +165,7 @@ public class ParcelsController : ControllerBase
     }
 
     [HttpGet("/api/parcels/public")]
-    [Authorize]
+    [Authorize(Roles = "Beekeeper,Farmer")]
     public async Task<IActionResult> GetPublicParcels()
     {
         var parcels = await _db.Parcels

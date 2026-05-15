@@ -1,18 +1,30 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { getParcels, createParcel, setCrop, deleteCrop } from "../../services/parcelService";
 import { CropTypes } from "../../models";
+import SmartMap from "../../components/SmartMap";
 
 export default function ParcelsPage() {
   const [parcels, setParcels] = useState([]);
   const [form, setForm] = useState({ name: "", latitude: "", longitude: "" });
   const [cropForm, setCropForm] = useState({ parcelId: null, cropType: CropTypes[0], bloomingPeriod: "", additionalInfo: "" });
 
-  useEffect(() => { load(); }, []);
-
-  const load = async () => {
+  const load = useCallback(async () => {
     const res = await getParcels();
     setParcels(res.data);
-  };
+  }, []);
+
+  useEffect(() => {
+    let ignore = false;
+
+    getParcels().then((res) => {
+      if (ignore) return;
+      setParcels(res.data);
+    });
+
+    return () => {
+      ignore = true;
+    };
+  }, []);
 
   const handleCreate = async (e) => {
     e.preventDefault();
@@ -36,6 +48,21 @@ export default function ParcelsPage() {
 
       <div className="card" style={{ marginBottom: 24 }}>
         <h3>Dodaj parcelu</h3>
+        <p className="card-meta">Kliknite na mapu da izaberete tačnu lokaciju parcele.</p>
+        <div style={{ marginBottom: 16 }}>
+          <SmartMap
+            parcels={parcels}
+            selectedLocation={{
+              latitude: parseFloat(form.latitude),
+              longitude: parseFloat(form.longitude),
+            }}
+            onLocationSelect={({ latitude, longitude }) => setForm({
+              ...form,
+              latitude: latitude.toString(),
+              longitude: longitude.toString(),
+            })}
+          />
+        </div>
         <form onSubmit={handleCreate}>
           <div className="form-row">
             <input placeholder="Naziv parcele" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required />
@@ -44,6 +71,12 @@ export default function ParcelsPage() {
             <button type="submit" className="btn-primary">Dodaj parcelu</button>
           </div>
         </form>
+      </div>
+
+      <div className="card" style={{ marginBottom: 24 }}>
+        <h3>Mapa parcela i posejanih kultura</h3>
+        <p className="card-meta">Zeleni markeri prikazuju vaše parcele. Klik na marker prikazuje trenutno posejanu kulturu.</p>
+        <SmartMap parcels={parcels} />
       </div>
 
       <div className="card-grid">

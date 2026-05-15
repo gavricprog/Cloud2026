@@ -1,19 +1,35 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getApiaries, createApiary, deleteApiary } from "../../services/apiaryService";
+import { getPublicParcels } from "../../services/parcelService";
+import SmartMap from "../../components/SmartMap";
 
 export default function ApiariesPage() {
   const [apiaries, setApiaries] = useState([]);
+  const [publicParcels, setPublicParcels] = useState([]);
   const [form, setForm] = useState({ name: "", latitude: "", longitude: "", description: "" });
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  useEffect(() => { load(); }, []);
+  const load = useCallback(async () => {
+    const [apiariesRes, parcelsRes] = await Promise.all([getApiaries(), getPublicParcels()]);
+    setApiaries(apiariesRes.data);
+    setPublicParcels(parcelsRes.data);
+  }, []);
 
-  const load = async () => {
-    const res = await getApiaries();
-    setApiaries(res.data);
-  };
+  useEffect(() => {
+    let ignore = false;
+
+    Promise.all([getApiaries(), getPublicParcels()]).then(([apiariesRes, parcelsRes]) => {
+      if (ignore) return;
+      setApiaries(apiariesRes.data);
+      setPublicParcels(parcelsRes.data);
+    });
+
+    return () => {
+      ignore = true;
+    };
+  }, []);
 
   const handleCreate = async (e) => {
     e.preventDefault();
@@ -35,7 +51,23 @@ export default function ApiariesPage() {
 
       <div className="card" style={{ marginBottom: 24 }}>
         <h3>Dodaj pčelinjak</h3>
+        <p className="card-meta">Kliknite na mapu da automatski popunite koordinate pčelinjaka.</p>
         {error && <div className="alert-error">{error}</div>}
+        <div style={{ marginBottom: 16 }}>
+          <SmartMap
+            apiaries={apiaries}
+            parcels={publicParcels}
+            selectedLocation={{
+              latitude: parseFloat(form.latitude),
+              longitude: parseFloat(form.longitude),
+            }}
+            onLocationSelect={({ latitude, longitude }) => setForm({
+              ...form,
+              latitude: latitude.toString(),
+              longitude: longitude.toString(),
+            })}
+          />
+        </div>
         <form onSubmit={handleCreate}>
           <div className="form-row">
             <input placeholder="Naziv" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required />
@@ -45,6 +77,12 @@ export default function ApiariesPage() {
             <button type="submit" className="btn-primary">Dodaj pčelinjak</button>
           </div>
         </form>
+      </div>
+
+      <div className="card" style={{ marginBottom: 24 }}>
+        <h3>Mapa pčelinjaka i posejanih kultura</h3>
+        <p className="card-meta">Narandžasti markeri su vaši pčelinjaci, a zeleni markeri su parcele sa kulturama koje su uneli poljoprivrednici.</p>
+        <SmartMap apiaries={apiaries} parcels={publicParcels} />
       </div>
 
       <div className="card-grid">

@@ -179,6 +179,45 @@ input::placeholder { color: #9ca3af; }
   flex-wrap: wrap;
 }
 
+/* MAP */
+.smart-map {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: #f3f4f6;
+}
+
+.smart-map .leaflet-container {
+  font-family: var(--sans);
+}
+
+.map-marker {
+  border: 2px solid #fff;
+  border-radius: 50% 50% 50% 0;
+  color: #fff;
+  display: grid;
+  font-size: 10px;
+  font-weight: 700;
+  place-items: center;
+  transform: rotate(-45deg);
+}
+
+.map-marker span {
+  transform: rotate(45deg);
+}
+
+.map-marker-apiary {
+  background: var(--primary);
+}
+
+.map-marker-parcel {
+  background: var(--success);
+}
+
+.map-marker-selected {
+  background: var(--danger);
+}
+
 /* TABLE */
 .table-wrap {
   overflow-x: auto;
