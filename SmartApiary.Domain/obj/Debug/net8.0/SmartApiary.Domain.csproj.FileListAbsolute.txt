@@ -22,3 +22,15 @@ C:\Users\Bogdan\Desktop\lazarGit\Cloud2026\SmartApiary.Domain\obj\Debug\net8.0\S
 C:\Users\Bogdan\Desktop\lazarGit\Cloud2026\SmartApiary.Domain\obj\Debug\net8.0\refint\SmartApiary.Domain.dll
 C:\Users\Bogdan\Desktop\lazarGit\Cloud2026\SmartApiary.Domain\obj\Debug\net8.0\SmartApiary.Domain.pdb
 C:\Users\Bogdan\Desktop\lazarGit\Cloud2026\SmartApiary.Domain\obj\Debug\net8.0\ref\SmartApiary.Domain.dll
+E:\FAKS\CLOUD\Cloud2026\SmartApiary.Domain\bin\Debug\net8.0\SmartApiary.Domain.deps.json
+E:\FAKS\CLOUD\Cloud2026\SmartApiary.Domain\bin\Debug\net8.0\SmartApiary.Domain.dll
+E:\FAKS\CLOUD\Cloud2026\SmartApiary.Domain\bin\Debug\net8.0\SmartApiary.Domain.pdb
+E:\FAKS\CLOUD\Cloud2026\SmartApiary.Domain\obj\Debug\net8.0\SmartApiary.Domain.GeneratedMSBuildEditorConfig.editorconfig
+E:\FAKS\CLOUD\Cloud2026\SmartApiary.Domain\obj\Debug\net8.0\SmartApiary.Domain.AssemblyInfoInputs.cache
+E:\FAKS\CLOUD\Cloud2026\SmartApiary.Domain\obj\Debug\net8.0\SmartApiary.Domain.AssemblyInfo.cs
+E:\FAKS\CLOUD\Cloud2026\SmartApiary.Domain\obj\Debug\net8.0\SmartApiary.Domain.csproj.CoreCompileInputs.cache
+E:\FAKS\CLOUD\Cloud2026\SmartApiary.Domain\obj\Debug\net8.0\SmartApiary.Domain.sourcelink.json
+E:\FAKS\CLOUD\Cloud2026\SmartApiary.Domain\obj\Debug\net8.0\SmartApiary.Domain.dll
+E:\FAKS\CLOUD\Cloud2026\SmartApiary.Domain\obj\Debug\net8.0\refint\SmartApiary.Domain.dll
+E:\FAKS\CLOUD\Cloud2026\SmartApiary.Domain\obj\Debug\net8.0\SmartApiary.Domain.pdb
+E:\FAKS\CLOUD\Cloud2026\SmartApiary.Domain\obj\Debug\net8.0\ref\SmartApiary.Domain.dll

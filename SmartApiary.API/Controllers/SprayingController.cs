@@ -9,6 +9,7 @@ using SmartApiary.Domain.Enums;
 using SmartApiary.Infrastructure.Helpers;
 using SmartApiary.Infrastructure.Persistence;
 using SmartApiary.Infrastructure.Services;
+using System.Text.Json;
 
 namespace SmartApiary.API.Controllers;
 
@@ -57,7 +58,9 @@ public class SprayingController : ControllerBase
             DurationHours = request.DurationHours,
             SubstanceType = request.SubstanceType,
             Status = SprayingStatus.Scheduled
-        };
+        };       
+
+        var weatherWarning = await CheckWeatherWarning(parcel.Latitude, parcel.Longitude);
 
         _db.SprayingAnnouncements.Add(announcement);
 
@@ -66,8 +69,45 @@ public class SprayingController : ControllerBase
 
         await _db.SaveChangesAsync();
 
-        return CreatedAtAction(nameof(GetById), new { id = announcement.Id }, MapToDto(announcement, parcel.Name));
+        return CreatedAtAction(nameof(GetById),new { id = announcement.Id },
+            new
+            {
+                Announcement = MapToDto(announcement, parcel.Name),
+                WeatherWarning = weatherWarning
+        });
     }
+
+    private async Task<string?> CheckWeatherWarning(double latitude, double longitude)
+    {
+        var apiKey = _config["OpenWeatherMap:ApiKey"];
+
+        using var client = new HttpClient();
+
+        var url =
+            $"https://api.openweathermap.org/data/2.5/weather?lat={latitude}&lon={longitude}&appid={apiKey}&units=metric";
+
+        var response = await client.GetStringAsync(url);
+
+        using var json = JsonDocument.Parse(response);
+
+        var root = json.RootElement;
+
+        var windSpeed = root
+            .GetProperty("wind")
+            .GetProperty("speed")
+            .GetDouble();
+
+        bool hasRain = root.TryGetProperty("rain", out _);
+
+        if (windSpeed > 5 || hasRain)
+        {
+            return "Loši vremenski uslovi – preporučuje se pomeranje termina.";
+        }
+
+        return null;
+    }
+
+
 
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetById(Guid id)

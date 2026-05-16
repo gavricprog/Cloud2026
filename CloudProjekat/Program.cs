@@ -14,4 +14,7 @@ builder.Services
 
 builder.Services.AddInfrastructure(builder.Configuration);
 
+
 builder.Build().Run();
+
+

@@ -40,8 +40,11 @@ export default function SprayingPage() {
     setError("");
     try {
       const res = await createAnnouncement({ ...form, durationHours: parseInt(form.durationHours, 10) });
-      alert(`Prskanje zakazano. Obavešteno pčelara: ${res.data.notifiedBeekeeperCount}`);
+      alert(`Prskanje zakazano. Obavešteno pčelara: ${res.data.announcement.notifiedBeekeeperCount}`);
       setForm({ parcelId: "", plannedStartTime: "", durationHours: 1, substanceType: "" });
+      if(res.data.weatherWarning){
+        alert(res.data.weatherWarning);
+      }
       load();
     } catch (err) {
       setError(err.response?.data?.message || "Greška pri zakazivanju prskanja.");

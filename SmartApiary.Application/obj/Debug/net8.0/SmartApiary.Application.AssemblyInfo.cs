@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SmartApiary.Application")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+04d73bcd9bb554ac76445cbfef00e4b1b037fbb2")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+801256587ecbd5f23eea066f0c96b2a02da30869")]
 [assembly: System.Reflection.AssemblyProductAttribute("SmartApiary.Application")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SmartApiary.Application")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -1,44 +1,42 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Bogdan\\Desktop\\lazarGit\\Cloud2026\\SmartApiary.API\\SmartApiary.API.csproj": {}
+    "E:\\FAKS\\CLOUD\\Cloud2026\\SmartApiary.API\\SmartApiary.API.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Bogdan\\Desktop\\lazarGit\\Cloud2026\\SmartApiary.API\\SmartApiary.API.csproj": {
+    "E:\\FAKS\\CLOUD\\Cloud2026\\SmartApiary.API\\SmartApiary.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Bogdan\\Desktop\\lazarGit\\Cloud2026\\SmartApiary.API\\SmartApiary.API.csproj",
+        "projectUniqueName": "E:\\FAKS\\CLOUD\\Cloud2026\\SmartApiary.API\\SmartApiary.API.csproj",
         "projectName": "SmartApiary.API",
-        "projectPath": "C:\\Users\\Bogdan\\Desktop\\lazarGit\\Cloud2026\\SmartApiary.API\\SmartApiary.API.csproj",
-        "packagesPath": "C:\\Users\\Bogdan\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Bogdan\\Desktop\\lazarGit\\Cloud2026\\SmartApiary.API\\obj\\",
+        "projectPath": "E:\\FAKS\\CLOUD\\Cloud2026\\SmartApiary.API\\SmartApiary.API.csproj",
+        "packagesPath": "C:\\Users\\alfak\\.nuget\\packages\\",
+        "outputPath": "E:\\FAKS\\CLOUD\\Cloud2026\\SmartApiary.API\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Bogdan\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\alfak\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\ServiceFabricSDK.config"
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\Microsoft SDKs\\Service Fabric\\packages": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\Bogdan\\Desktop\\lazarGit\\Cloud2026\\SmartApiary.Application\\SmartApiary.Application.csproj": {
-                "projectPath": "C:\\Users\\Bogdan\\Desktop\\lazarGit\\Cloud2026\\SmartApiary.Application\\SmartApiary.Application.csproj"
+              "E:\\FAKS\\CLOUD\\Cloud2026\\SmartApiary.Application\\SmartApiary.Application.csproj": {
+                "projectPath": "E:\\FAKS\\CLOUD\\Cloud2026\\SmartApiary.Application\\SmartApiary.Application.csproj"
               },
-              "C:\\Users\\Bogdan\\Desktop\\lazarGit\\Cloud2026\\SmartApiary.Infrastructure\\SmartApiary.Infrastructure.csproj": {
-                "projectPath": "C:\\Users\\Bogdan\\Desktop\\lazarGit\\Cloud2026\\SmartApiary.Infrastructure\\SmartApiary.Infrastructure.csproj"
+              "E:\\FAKS\\CLOUD\\Cloud2026\\SmartApiary.Infrastructure\\SmartApiary.Infrastructure.csproj": {
+                "projectPath": "E:\\FAKS\\CLOUD\\Cloud2026\\SmartApiary.Infrastructure\\SmartApiary.Infrastructure.csproj"
               }
             }
           }
@@ -51,9 +49,9 @@
         "restoreAuditProperties": {
           "enableAudit": "true",
           "auditLevel": "low",
-          "auditMode": "direct"
+          "auditMode": "all"
         },
-        "SdkAnalysisLevel": "9.0.300"
+        "SdkAnalysisLevel": "9.0.100"
       },
       "frameworks": {
         "net8.0": {
@@ -97,42 +95,40 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.313/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\Bogdan\\Desktop\\lazarGit\\Cloud2026\\SmartApiary.Application\\SmartApiary.Application.csproj": {
+    "E:\\FAKS\\CLOUD\\Cloud2026\\SmartApiary.Application\\SmartApiary.Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Bogdan\\Desktop\\lazarGit\\Cloud2026\\SmartApiary.Application\\SmartApiary.Application.csproj",
+        "projectUniqueName": "E:\\FAKS\\CLOUD\\Cloud2026\\SmartApiary.Application\\SmartApiary.Application.csproj",
         "projectName": "SmartApiary.Application",
-        "projectPath": "C:\\Users\\Bogdan\\Desktop\\lazarGit\\Cloud2026\\SmartApiary.Application\\SmartApiary.Application.csproj",
-        "packagesPath": "C:\\Users\\Bogdan\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Bogdan\\Desktop\\lazarGit\\Cloud2026\\SmartApiary.Application\\obj\\",
+        "projectPath": "E:\\FAKS\\CLOUD\\Cloud2026\\SmartApiary.Application\\SmartApiary.Application.csproj",
+        "packagesPath": "C:\\Users\\alfak\\.nuget\\packages\\",
+        "outputPath": "E:\\FAKS\\CLOUD\\Cloud2026\\SmartApiary.Application\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Bogdan\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\alfak\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\ServiceFabricSDK.config"
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\Microsoft SDKs\\Service Fabric\\packages": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\Bogdan\\Desktop\\lazarGit\\Cloud2026\\SmartApiary.Domain\\SmartApiary.Domain.csproj": {
-                "projectPath": "C:\\Users\\Bogdan\\Desktop\\lazarGit\\Cloud2026\\SmartApiary.Domain\\SmartApiary.Domain.csproj"
+              "E:\\FAKS\\CLOUD\\Cloud2026\\SmartApiary.Domain\\SmartApiary.Domain.csproj": {
+                "projectPath": "E:\\FAKS\\CLOUD\\Cloud2026\\SmartApiary.Domain\\SmartApiary.Domain.csproj"
               }
             }
           }
@@ -145,9 +141,9 @@
         "restoreAuditProperties": {
           "enableAudit": "true",
           "auditLevel": "low",
-          "auditMode": "direct"
+          "auditMode": "all"
         },
-        "SdkAnalysisLevel": "9.0.300"
+        "SdkAnalysisLevel": "9.0.100"
       },
       "frameworks": {
         "net8.0": {
@@ -168,34 +164,32 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.313/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\Bogdan\\Desktop\\lazarGit\\Cloud2026\\SmartApiary.Domain\\SmartApiary.Domain.csproj": {
+    "E:\\FAKS\\CLOUD\\Cloud2026\\SmartApiary.Domain\\SmartApiary.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Bogdan\\Desktop\\lazarGit\\Cloud2026\\SmartApiary.Domain\\SmartApiary.Domain.csproj",
+        "projectUniqueName": "E:\\FAKS\\CLOUD\\Cloud2026\\SmartApiary.Domain\\SmartApiary.Domain.csproj",
         "projectName": "SmartApiary.Domain",
-        "projectPath": "C:\\Users\\Bogdan\\Desktop\\lazarGit\\Cloud2026\\SmartApiary.Domain\\SmartApiary.Domain.csproj",
-        "packagesPath": "C:\\Users\\Bogdan\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Bogdan\\Desktop\\lazarGit\\Cloud2026\\SmartApiary.Domain\\obj\\",
+        "projectPath": "E:\\FAKS\\CLOUD\\Cloud2026\\SmartApiary.Domain\\SmartApiary.Domain.csproj",
+        "packagesPath": "C:\\Users\\alfak\\.nuget\\packages\\",
+        "outputPath": "E:\\FAKS\\CLOUD\\Cloud2026\\SmartApiary.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Bogdan\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\alfak\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\ServiceFabricSDK.config"
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\Microsoft SDKs\\Service Fabric\\packages": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -212,9 +206,9 @@
         "restoreAuditProperties": {
           "enableAudit": "true",
           "auditLevel": "low",
-          "auditMode": "direct"
+          "auditMode": "all"
         },
-        "SdkAnalysisLevel": "9.0.300"
+        "SdkAnalysisLevel": "9.0.100"
       },
       "frameworks": {
         "net8.0": {
@@ -235,45 +229,43 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.313/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\Bogdan\\Desktop\\lazarGit\\Cloud2026\\SmartApiary.Infrastructure\\SmartApiary.Infrastructure.csproj": {
+    "E:\\FAKS\\CLOUD\\Cloud2026\\SmartApiary.Infrastructure\\SmartApiary.Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Bogdan\\Desktop\\lazarGit\\Cloud2026\\SmartApiary.Infrastructure\\SmartApiary.Infrastructure.csproj",
+        "projectUniqueName": "E:\\FAKS\\CLOUD\\Cloud2026\\SmartApiary.Infrastructure\\SmartApiary.Infrastructure.csproj",
         "projectName": "SmartApiary.Infrastructure",
-        "projectPath": "C:\\Users\\Bogdan\\Desktop\\lazarGit\\Cloud2026\\SmartApiary.Infrastructure\\SmartApiary.Infrastructure.csproj",
-        "packagesPath": "C:\\Users\\Bogdan\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Bogdan\\Desktop\\lazarGit\\Cloud2026\\SmartApiary.Infrastructure\\obj\\",
+        "projectPath": "E:\\FAKS\\CLOUD\\Cloud2026\\SmartApiary.Infrastructure\\SmartApiary.Infrastructure.csproj",
+        "packagesPath": "C:\\Users\\alfak\\.nuget\\packages\\",
+        "outputPath": "E:\\FAKS\\CLOUD\\Cloud2026\\SmartApiary.Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Bogdan\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\alfak\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\ServiceFabricSDK.config"
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\Microsoft SDKs\\Service Fabric\\packages": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\Bogdan\\Desktop\\lazarGit\\Cloud2026\\SmartApiary.Application\\SmartApiary.Application.csproj": {
-                "projectPath": "C:\\Users\\Bogdan\\Desktop\\lazarGit\\Cloud2026\\SmartApiary.Application\\SmartApiary.Application.csproj"
+              "E:\\FAKS\\CLOUD\\Cloud2026\\SmartApiary.Application\\SmartApiary.Application.csproj": {
+                "projectPath": "E:\\FAKS\\CLOUD\\Cloud2026\\SmartApiary.Application\\SmartApiary.Application.csproj"
               },
-              "C:\\Users\\Bogdan\\Desktop\\lazarGit\\Cloud2026\\SmartApiary.Domain\\SmartApiary.Domain.csproj": {
-                "projectPath": "C:\\Users\\Bogdan\\Desktop\\lazarGit\\Cloud2026\\SmartApiary.Domain\\SmartApiary.Domain.csproj"
+              "E:\\FAKS\\CLOUD\\Cloud2026\\SmartApiary.Domain\\SmartApiary.Domain.csproj": {
+                "projectPath": "E:\\FAKS\\CLOUD\\Cloud2026\\SmartApiary.Domain\\SmartApiary.Domain.csproj"
               }
             }
           }
@@ -286,14 +278,18 @@
         "restoreAuditProperties": {
           "enableAudit": "true",
           "auditLevel": "low",
-          "auditMode": "direct"
+          "auditMode": "all"
         },
-        "SdkAnalysisLevel": "9.0.300"
+        "SdkAnalysisLevel": "9.0.100"
       },
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "Azure.Storage.Blobs": {
+              "target": "Package",
+              "version": "[12.22.2, )"
+            },
             "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
               "target": "Package",
               "version": "[8.0.0, )"
@@ -313,6 +309,18 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[8.0.0, )"
+            },
+            "Microsoft.Extensions.Hosting.Abstractions": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "QuestPDF": {
+              "target": "Package",
+              "version": "[2024.12.3, )"
+            },
+            "SixLabors.ImageSharp": {
+              "target": "Package",
+              "version": "[3.1.7, )"
             },
             "System.IdentityModel.Tokens.Jwt": {
               "target": "Package",
@@ -335,7 +343,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.313/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

@@ -1,1 +1,20 @@
-{"Version":1,"Hash":"cfmHTNNv8E2JdYZXbWwOc77wZOFlWGFel6oW7hU88/A=","Source":"SmartApiary.API","BasePath":"_content/SmartApiary.API","Mode":"Default","ManifestType":"Build","ReferencedProjectsConfiguration":[],"DiscoveryPatterns":[],"Assets":[],"Endpoints":[]}
+{
+  "Version": 1,
+  "Hash": "PHBiAj4txXPJOka4PbPydp+wzwER098JEGgx1wBZI/E=",
+  "Source": "SmartApiary.API",
+  "BasePath": "_content/SmartApiary.API",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "SmartApiary.API\\wwwroot",
+      "Source": "SmartApiary.API",
+      "ContentRoot": "E:\\FAKS\\CLOUD\\Cloud2026\\SmartApiary.API\\wwwroot\\",
+      "BasePath": "_content/SmartApiary.API",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [],
+  "Endpoints": []
+}

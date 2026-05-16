@@ -97,6 +97,7 @@ if (app.Environment.IsDevelopment())
             IsActive = true
         });
         db.SaveChanges();
+
     }
 }
 
