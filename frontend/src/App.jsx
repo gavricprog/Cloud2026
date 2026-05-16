@@ -14,6 +14,7 @@ import ApiariesPage from "./pages/beekeeper/ApiariesPage";
 import HivesPage from "./pages/beekeeper/HivesPage";
 import HiveDiaryPage from "./pages/beekeeper/HiveDiaryPage";
 import TelemetryPage from "./pages/beekeeper/TelemetryPage";
+import AlertsPage from "./pages/beekeeper/AlertsPage";
 
 import ParcelsPage from "./pages/farmer/ParcelsPage";
 import SprayingPage from "./pages/farmer/SprayingPage";
@@ -26,8 +27,15 @@ function NavBar() {
   const handleLogout = () => { clearAuth(); navigate("/login"); };
   return (
     <nav className="navbar">
-      <span className="navbar-brand">🐝 Smart Apiary</span>
+      <span className="navbar-brand" style={{ cursor: "pointer" }} onClick={() => {
+        if (user.role === Roles.Beekeeper) navigate("/apiaries");
+        else if (user.role === Roles.Farmer) navigate("/parcels");
+        else if (user.role === Roles.Admin) navigate("/admin/users");
+      }}>🐝 Smart Apiary</span>
       <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+        {user.role === Roles.Beekeeper && (
+          <button className="btn-secondary btn-sm" onClick={() => navigate("/alerts")}>🔔 Upozorenja</button>
+        )}
         <span className="navbar-user">{user.fullName} · {user.role}</span>
         <button onClick={handleLogout} className="btn-danger btn-sm">Odjavi se</button>
       </div>
@@ -60,6 +68,9 @@ export default function App() {
         } />
         <Route path="/apiaries/:apiaryId/telemetry" element={
           <ProtectedRoute roles={[Roles.Beekeeper]}><TelemetryPage /></ProtectedRoute>
+        } />
+        <Route path="/alerts" element={
+          <ProtectedRoute roles={[Roles.Beekeeper]}><AlertsPage /></ProtectedRoute>
         } />
 
         <Route path="/parcels" element={

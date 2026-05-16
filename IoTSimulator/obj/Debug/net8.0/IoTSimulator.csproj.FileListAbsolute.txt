@@ -1,0 +1,15 @@
+C:\Users\Bogdan\Desktop\lazarGit\Cloud2026\IoTSimulator\bin\Debug\net8.0\IoTSimulator.exe
+C:\Users\Bogdan\Desktop\lazarGit\Cloud2026\IoTSimulator\bin\Debug\net8.0\IoTSimulator.deps.json
+C:\Users\Bogdan\Desktop\lazarGit\Cloud2026\IoTSimulator\bin\Debug\net8.0\IoTSimulator.runtimeconfig.json
+C:\Users\Bogdan\Desktop\lazarGit\Cloud2026\IoTSimulator\bin\Debug\net8.0\IoTSimulator.dll
+C:\Users\Bogdan\Desktop\lazarGit\Cloud2026\IoTSimulator\bin\Debug\net8.0\IoTSimulator.pdb
+C:\Users\Bogdan\Desktop\lazarGit\Cloud2026\IoTSimulator\obj\Debug\net8.0\IoTSimulator.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Bogdan\Desktop\lazarGit\Cloud2026\IoTSimulator\obj\Debug\net8.0\IoTSimulator.AssemblyInfoInputs.cache
+C:\Users\Bogdan\Desktop\lazarGit\Cloud2026\IoTSimulator\obj\Debug\net8.0\IoTSimulator.AssemblyInfo.cs
+C:\Users\Bogdan\Desktop\lazarGit\Cloud2026\IoTSimulator\obj\Debug\net8.0\IoTSimulator.csproj.CoreCompileInputs.cache
+C:\Users\Bogdan\Desktop\lazarGit\Cloud2026\IoTSimulator\obj\Debug\net8.0\IoTSimulator.sourcelink.json
+C:\Users\Bogdan\Desktop\lazarGit\Cloud2026\IoTSimulator\obj\Debug\net8.0\IoTSimulator.dll
+C:\Users\Bogdan\Desktop\lazarGit\Cloud2026\IoTSimulator\obj\Debug\net8.0\refint\IoTSimulator.dll
+C:\Users\Bogdan\Desktop\lazarGit\Cloud2026\IoTSimulator\obj\Debug\net8.0\IoTSimulator.pdb
+C:\Users\Bogdan\Desktop\lazarGit\Cloud2026\IoTSimulator\obj\Debug\net8.0\IoTSimulator.genruntimeconfig.cache
+C:\Users\Bogdan\Desktop\lazarGit\Cloud2026\IoTSimulator\obj\Debug\net8.0\ref\IoTSimulator.dll

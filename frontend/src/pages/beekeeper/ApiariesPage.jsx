@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getApiaries, createApiary, deleteApiary } from "../../services/apiaryService";
+import { getApiaries, createApiary, updateApiary, deleteApiary } from "../../services/apiaryService";
 import { getPublicParcels } from "../../services/parcelService";
 import SmartMap from "../../components/SmartMap";
 
@@ -8,6 +8,8 @@ export default function ApiariesPage() {
   const [apiaries, setApiaries] = useState([]);
   const [publicParcels, setPublicParcels] = useState([]);
   const [form, setForm] = useState({ name: "", latitude: "", longitude: "", description: "" });
+  const [editingId, setEditingId] = useState(null);
+  const [editForm, setEditForm] = useState({ name: "", latitude: "", longitude: "", description: "" });
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
@@ -30,6 +32,18 @@ export default function ApiariesPage() {
       ignore = true;
     };
   }, []);
+
+  const startEdit = (a) => {
+    setEditingId(a.id);
+    setEditForm({ name: a.name, latitude: a.latitude.toString(), longitude: a.longitude.toString(), description: a.description || "" });
+  };
+
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    await updateApiary(editingId, { ...editForm, latitude: parseFloat(editForm.latitude), longitude: parseFloat(editForm.longitude) });
+    setEditingId(null);
+    load();
+  };
 
   const handleCreate = async (e) => {
     e.preventDefault();
@@ -94,9 +108,24 @@ export default function ApiariesPage() {
               🐝 Košnice: {a.hiveCount}
               {a.description && <><br />{a.description}</>}
             </div>
+            {editingId === a.id && (
+              <form onSubmit={handleUpdate} style={{ marginTop: 10 }}>
+                <div className="form-row">
+                  <input placeholder="Naziv" value={editForm.name} onChange={(e) => setEditForm({ ...editForm, name: e.target.value })} required />
+                  <input placeholder="Geografska širina" value={editForm.latitude} onChange={(e) => setEditForm({ ...editForm, latitude: e.target.value })} required />
+                  <input placeholder="Geografska dužina" value={editForm.longitude} onChange={(e) => setEditForm({ ...editForm, longitude: e.target.value })} required />
+                  <input placeholder="Opis (opciono)" value={editForm.description} onChange={(e) => setEditForm({ ...editForm, description: e.target.value })} />
+                </div>
+                <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
+                  <button type="submit" className="btn-primary btn-sm">Sačuvaj</button>
+                  <button type="button" className="btn-secondary btn-sm" onClick={() => setEditingId(null)}>Otkaži</button>
+                </div>
+              </form>
+            )}
             <div className="card-actions">
               <button className="btn-secondary btn-sm" onClick={() => navigate(`/apiaries/${a.id}/hives`)}>Košnice</button>
               <button className="btn-secondary btn-sm" onClick={() => navigate(`/apiaries/${a.id}/telemetry`)}>Telemetrija</button>
+              <button className="btn-secondary btn-sm" onClick={() => startEdit(a)}>Izmeni</button>
               <button className="btn-danger btn-sm" onClick={() => deleteApiary(a.id).then(load)}>Obriši</button>
             </div>
           </div>

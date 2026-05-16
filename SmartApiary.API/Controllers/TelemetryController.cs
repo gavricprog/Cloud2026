@@ -80,9 +80,13 @@ public class TelemetryController : ControllerBase
             .GroupBy(t => t.RecordedAt.Date)
             .Select(g =>
             {
-                var morning = g.Where(t => t.RecordedAt.Hour >= 7 && t.RecordedAt.Hour <= 9).MinBy(t => Math.Abs(t.RecordedAt.Hour - 8));
-                var evening = g.Where(t => t.RecordedAt.Hour >= 19 && t.RecordedAt.Hour <= 21).MinBy(t => Math.Abs(t.RecordedAt.Hour - 20));
-                var delta = (morning != null && evening != null) ? evening.Weight - morning.Weight : 0;
+                var morning = g.Where(t => t.RecordedAt.Hour >= 7 && t.RecordedAt.Hour <= 9).MinBy(t => Math.Abs(t.RecordedAt.Hour - 8))
+                              ?? g.MinBy(t => t.RecordedAt); // fallback: prvo merenje dana
+                var evening = g.Where(t => t.RecordedAt.Hour >= 19 && t.RecordedAt.Hour <= 21).MinBy(t => Math.Abs(t.RecordedAt.Hour - 20))
+                              ?? g.MaxBy(t => t.RecordedAt); // fallback: poslednje merenje dana
+                var delta = (morning != null && evening != null && morning.Id != evening.Id)
+                    ? Math.Round(evening.Weight - morning.Weight, 2)
+                    : 0;
                 return new DailyNectarDto { Date = g.Key, Delta = delta };
             })
             .OrderBy(d => d.Date)

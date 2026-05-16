@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import {
   BarChart,
   Bar,
+  Cell,
   LineChart,
   Line,
   XAxis,
@@ -111,11 +112,14 @@ export default function TelemetryPage() {
                   <Tooltip formatter={(value) => [`${value} kg`, "Delta"]} />
                   <Legend />
                   <ReferenceLine y={0} stroke="#000" />
-                  <Bar
-                    dataKey="delta"
-                    name="Prinos / potrošnja"
-                    fill="#4caf50"
-                  />
+                  <Bar dataKey="delta" name="Prinos / potrošnja">
+                    {dailyNectarData.map((entry, index) => (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={entry.delta >= 0 ? "#4caf50" : "#f44336"}
+                      />
+                    ))}
+                  </Bar>
                 </BarChart>
               </ResponsiveContainer>
             )}
