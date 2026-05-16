@@ -1,0 +1,20 @@
+# Build output
+**/bin/
+**/obj/
+.vs/
+
+# Node
+package-lock.json
+node_modules/
+
+# Local / secrets
+CloudProjekat/local.settings.json
+**/appsettings.*.local.json
+
+# Uploaded media (local dev)
+SmartApiary.API/wwwroot/media/
+
+# OS / IDE
+Thumbs.db
+.DS_Store
+.idea/

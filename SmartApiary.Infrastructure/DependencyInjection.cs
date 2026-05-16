@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SmartApiary.Application.Interfaces;
+using SmartApiary.Infrastructure.HostedServices;
 using SmartApiary.Infrastructure.Persistence;
 using SmartApiary.Infrastructure.Services;
 
@@ -16,6 +17,9 @@ public static class DependencyInjection
 
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IEmailService, EmailService>();
+        services.AddScoped<IBlobStorageService, BlobStorageService>();
+        services.AddScoped<ISprayingCompletionService, SprayingCompletionService>();
+        services.AddHostedService<SprayingLogHostedService>();
 
         return services;
     }

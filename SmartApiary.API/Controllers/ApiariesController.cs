@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SmartApiary.Application.DTOs.Apiaries;
+using SmartApiary.Application.Interfaces;
 using SmartApiary.Domain.Entities;
 using SmartApiary.Infrastructure.Persistence;
 
@@ -14,10 +15,14 @@ namespace SmartApiary.API.Controllers;
 public class ApiariesController : ControllerBase
 {
     private readonly AppDbContext _db;
+    private readonly IBlobStorageService _blobStorage;
+    private readonly IConfiguration _config;
 
-    public ApiariesController(AppDbContext db)
+    public ApiariesController(AppDbContext db, IBlobStorageService blobStorage, IConfiguration config)
     {
         _db = db;
+        _blobStorage = blobStorage;
+        _config = config;
     }
 
     private Guid CurrentUserId => Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
@@ -146,5 +151,36 @@ public class ApiariesController : ControllerBase
             .ToListAsync();
 
         return Ok(hives);
+    }
+
+    [HttpPost("{id:guid}/image")]
+    [RequestSizeLimit(5 * 1024 * 1024)]
+    public async Task<IActionResult> UploadImage(Guid id, IFormFile file)
+    {
+        var apiary = await _db.Apiaries.FirstOrDefaultAsync(a => a.Id == id && a.BeekeeperId == CurrentUserId);
+        if (apiary == null) return NotFound();
+
+        if (file == null || file.Length == 0)
+            return BadRequest(new { message = "Izaberite sliku." });
+
+        var allowed = new[] { "image/jpeg", "image/png", "image/webp" };
+        if (!allowed.Contains(file.ContentType, StringComparer.OrdinalIgnoreCase))
+            return BadRequest(new { message = "Dozvoljeni formati: JPEG, PNG, WebP." });
+
+        var imagesContainer = _config["BlobStorage:ApiaryImagesContainer"] ?? "apiary-images";
+
+        if (!string.IsNullOrEmpty(apiary.ImageUrl))
+            await _blobStorage.DeleteImageAsync(apiary.ImageUrl);
+        if (!string.IsNullOrEmpty(apiary.ThumbnailUrl))
+            await _blobStorage.DeleteImageAsync(apiary.ThumbnailUrl);
+
+        await using var stream = file.OpenReadStream();
+        await using var thumbSource = file.OpenReadStream();
+
+        apiary.ImageUrl = await _blobStorage.UploadImageAsync(stream, file.FileName, imagesContainer);
+        apiary.ThumbnailUrl = await _blobStorage.UploadThumbnailAsync(thumbSource, file.FileName);
+        await _db.SaveChangesAsync();
+
+        return Ok(new { apiary.ImageUrl, apiary.ThumbnailUrl });
     }
 }

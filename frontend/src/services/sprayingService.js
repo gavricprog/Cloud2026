@@ -12,3 +12,11 @@ export const getSprayingLogs = (parcelId, from, to) => {
   if (to) params.append("to", to);
   return api.get(`/api/spraying/logs?${params}`);
 };
+
+export const exportSprayingLogsPdf = (parcelId, from, to) => {
+  const params = new URLSearchParams();
+  if (parcelId) params.append("parcelId", parcelId);
+  if (from) params.append("from", from);
+  if (to) params.append("to", to);
+  return api.get(`/api/spraying/logs/export?${params}`, { responseType: "blob" });
+};

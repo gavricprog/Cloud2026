@@ -6,7 +6,9 @@ using SmartApiary.Application.DTOs.Spraying;
 using SmartApiary.Application.Interfaces;
 using SmartApiary.Domain.Entities;
 using SmartApiary.Domain.Enums;
+using SmartApiary.Infrastructure.Helpers;
 using SmartApiary.Infrastructure.Persistence;
+using SmartApiary.Infrastructure.Services;
 
 namespace SmartApiary.API.Controllers;
 
@@ -169,6 +171,27 @@ public class SprayingController : ControllerBase
         }));
     }
 
+    [HttpGet("logs/export")]
+    public async Task<IActionResult> ExportLogsPdf([FromQuery] Guid? parcelId, [FromQuery] DateTime? from, [FromQuery] DateTime? to)
+    {
+        var query = _db.SprayingLogs
+            .Include(l => l.SprayingAnnouncement)
+                .ThenInclude(a => a.Parcel)
+            .Where(l => l.SprayingAnnouncement.Parcel.FarmerId == CurrentUserId);
+
+        if (parcelId.HasValue)
+            query = query.Where(l => l.SprayingAnnouncement.ParcelId == parcelId.Value);
+        if (from.HasValue)
+            query = query.Where(l => l.ActualStartTime >= from.Value);
+        if (to.HasValue)
+            query = query.Where(l => l.ActualEndTime <= to.Value);
+
+        var logs = await query.OrderByDescending(l => l.ActualStartTime).ToListAsync();
+        var pdf = SprayingPdfExporter.Generate(logs, "Digitalni karton prskanja — Smart Apiary");
+        var fileName = $"karton-prskanja-{DateTime.UtcNow:yyyyMMdd-HHmm}.pdf";
+        return File(pdf, "application/pdf", fileName);
+    }
+
     private static SprayingAnnouncementDto MapToDto(SprayingAnnouncement s, string? parcelName = null) => new()
     {
         Id = s.Id,
@@ -260,22 +283,9 @@ public class SprayingController : ControllerBase
             .ToListAsync();
 
         return allApiaries
-            .Where(a => HaversineDistance(lat, lon, a.Latitude, a.Longitude) <= radiusKm)
+            .Where(a => SpatialHelper.IsWithinRadiusKm(lat, lon, a.Latitude, a.Longitude, radiusKm))
             .Select(a => a.Beekeeper)
             .DistinctBy(b => b.Id)
             .ToList();
     }
-
-    private static double HaversineDistance(double lat1, double lon1, double lat2, double lon2)
-    {
-        const double R = 6371;
-        var dLat = ToRad(lat2 - lat1);
-        var dLon = ToRad(lon2 - lon1);
-        var a = Math.Sin(dLat / 2) * Math.Sin(dLat / 2) +
-                Math.Cos(ToRad(lat1)) * Math.Cos(ToRad(lat2)) *
-                Math.Sin(dLon / 2) * Math.Sin(dLon / 2);
-        return R * 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
-    }
-
-    private static double ToRad(double deg) => deg * Math.PI / 180;
 }

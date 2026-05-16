@@ -8,6 +8,7 @@ import {
   getNotificationStatus,
 } from "../../services/sprayingService";
 import Modal from "../../components/Modal";
+import SmartMap from "../../components/SmartMap";
 import { toDatetimeLocalValue } from "../../utils/datetime";
 
 const statusLabel = { Scheduled: "Zakazano", Completed: "Završeno", Cancelled: "Otkazano" };
@@ -99,7 +100,16 @@ export default function SprayingPage() {
 
       <div className="card" style={{ marginBottom: 24 }}>
         <h3>Zakaži prskanje</h3>
+        <p className="card-meta">Kliknite na marker parcele na mapi ili izaberite iz liste.</p>
         {error && <div className="alert-error">{error}</div>}
+        <div style={{ marginBottom: 16 }}>
+          <SmartMap
+            parcels={parcels}
+            selectedParcelId={form.parcelId || null}
+            onParcelSelect={(p) => setForm({ ...form, parcelId: p.id })}
+            useCropIcons
+          />
+        </div>
         <form onSubmit={handleCreate}>
           <div className="form-row">
             <select value={form.parcelId} onChange={(e) => setForm({ ...form, parcelId: e.target.value })} required>

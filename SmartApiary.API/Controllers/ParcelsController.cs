@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SmartApiary.Application.DTOs.Parcels;
 using SmartApiary.Domain.Entities;
+using SmartApiary.Infrastructure.Helpers;
 using SmartApiary.Infrastructure.Persistence;
 
 namespace SmartApiary.API.Controllers;
@@ -189,5 +190,49 @@ public class ParcelsController : ControllerBase
             .ToListAsync();
 
         return Ok(parcels);
+    }
+
+    [HttpGet("nearby")]
+    [Authorize(Roles = "Beekeeper")]
+    public async Task<IActionResult> GetNearbyParcels([FromQuery] Guid? apiaryId, [FromQuery] double radiusKm = SpatialHelper.DefaultRadiusKm)
+    {
+        var apiaries = await _db.Apiaries
+            .Where(a => a.BeekeeperId == CurrentUserId)
+            .ToListAsync();
+
+        if (apiaryId.HasValue)
+            apiaries = apiaries.Where(a => a.Id == apiaryId.Value).ToList();
+
+        if (apiaries.Count == 0)
+            return Ok(Array.Empty<object>());
+
+        var parcels = await _db.Parcels
+            .Include(p => p.CurrentCrop)
+            .Include(p => p.Farmer)
+            .Where(p => p.CurrentCrop != null)
+            .ToListAsync();
+
+        var nearby = parcels
+            .Where(p => apiaries.Any(a =>
+                SpatialHelper.IsWithinRadiusKm(a.Latitude, a.Longitude, p.Latitude, p.Longitude, radiusKm)))
+            .DistinctBy(p => p.Id)
+            .Select(p => new
+            {
+                p.Id,
+                p.Name,
+                p.Latitude,
+                p.Longitude,
+                Crop = new
+                {
+                    p.CurrentCrop!.CropType,
+                    p.CurrentCrop.BloomingPeriod,
+                    p.CurrentCrop.AdditionalInfo
+                },
+                OwnerName = $"{p.Farmer.FirstName} {p.Farmer.LastName}",
+                OwnerPhone = p.Farmer.Phone
+            })
+            .ToList();
+
+        return Ok(nearby);
     }
 }

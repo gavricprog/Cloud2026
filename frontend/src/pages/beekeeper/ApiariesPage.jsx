@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getApiaries, createApiary, updateApiary, deleteApiary } from "../../services/apiaryService";
-import { getPublicParcels } from "../../services/parcelService";
+import { getApiaries, createApiary, updateApiary, deleteApiary, uploadApiaryImage } from "../../services/apiaryService";
+import { getNearbyParcels } from "../../services/parcelService";
 import SmartMap from "../../components/SmartMap";
 
 export default function ApiariesPage() {
   const [apiaries, setApiaries] = useState([]);
-  const [publicParcels, setPublicParcels] = useState([]);
+  const [nearbyParcels, setNearbyParcels] = useState([]);
   const [form, setForm] = useState({ name: "", latitude: "", longitude: "", description: "" });
   const [editingId, setEditingId] = useState(null);
   const [editForm, setEditForm] = useState({ name: "", latitude: "", longitude: "", description: "" });
@@ -14,18 +14,18 @@ export default function ApiariesPage() {
   const navigate = useNavigate();
 
   const load = useCallback(async () => {
-    const [apiariesRes, parcelsRes] = await Promise.all([getApiaries(), getPublicParcels()]);
+    const [apiariesRes, parcelsRes] = await Promise.all([getApiaries(), getNearbyParcels()]);
     setApiaries(apiariesRes.data);
-    setPublicParcels(parcelsRes.data);
+    setNearbyParcels(parcelsRes.data);
   }, []);
 
   useEffect(() => {
     let ignore = false;
 
-    Promise.all([getApiaries(), getPublicParcels()]).then(([apiariesRes, parcelsRes]) => {
+    Promise.all([getApiaries(), getNearbyParcels()]).then(([apiariesRes, parcelsRes]) => {
       if (ignore) return;
       setApiaries(apiariesRes.data);
-      setPublicParcels(parcelsRes.data);
+      setNearbyParcels(parcelsRes.data);
     });
 
     return () => {
@@ -70,7 +70,7 @@ export default function ApiariesPage() {
         <div style={{ marginBottom: 16 }}>
           <SmartMap
             apiaries={apiaries}
-            parcels={publicParcels}
+            parcels={nearbyParcels}
             selectedLocation={{
               latitude: parseFloat(form.latitude),
               longitude: parseFloat(form.longitude),
@@ -95,8 +95,8 @@ export default function ApiariesPage() {
 
       <div className="card" style={{ marginBottom: 24 }}>
         <h3>Mapa pčelinjaka i posejanih kultura</h3>
-        <p className="card-meta">Narandžasti markeri su vaši pčelinjaci, a zeleni markeri su parcele sa kulturama koje su uneli poljoprivrednici.</p>
-        <SmartMap apiaries={apiaries} parcels={publicParcels} />
+        <p className="card-meta">Markeri sa slikom su vaši pčelinjaci. Emoji markeri su parcele sa kulturama u radijusu od 5 km.</p>
+        <SmartMap apiaries={apiaries} parcels={nearbyParcels} />
       </div>
 
       <div className="card-grid">
@@ -122,9 +122,31 @@ export default function ApiariesPage() {
                 </div>
               </form>
             )}
+            {a.imageUrl && (
+              <img
+                src={a.imageUrl}
+                alt={a.name}
+                style={{ width: "100%", maxHeight: 140, objectFit: "cover", borderRadius: 8, marginBottom: 10 }}
+              />
+            )}
+            <label className="btn-secondary btn-sm" style={{ display: "inline-block", marginBottom: 8, cursor: "pointer" }}>
+              {a.imageUrl ? "Promeni sliku" : "Dodaj sliku"}
+              <input
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                hidden
+                onChange={async (e) => {
+                  const file = e.target.files?.[0];
+                  if (!file) return;
+                  await uploadApiaryImage(a.id, file);
+                  load();
+                  e.target.value = "";
+                }}
+              />
+            </label>
             <div className="card-actions">
-              <button className="btn-secondary btn-sm" onClick={() => navigate(`/apiaries/${a.id}/hives`)}>Košnice</button>
-              <button className="btn-secondary btn-sm" onClick={() => navigate(`/apiaries/${a.id}/telemetry`)}>Telemetrija</button>
+              <button type="button" className="btn-secondary btn-sm" onClick={() => navigate(`/apiaries/${a.id}/hives`)}>Košnice</button>
+              <button type="button" className="btn-secondary btn-sm" onClick={() => navigate(`/apiaries/${a.id}/telemetry`)}>Telemetrija</button>
               <button className="btn-secondary btn-sm" onClick={() => startEdit(a)}>Izmeni</button>
               <button className="btn-danger btn-sm" onClick={() => deleteApiary(a.id).then(load)}>Obriši</button>
             </div>

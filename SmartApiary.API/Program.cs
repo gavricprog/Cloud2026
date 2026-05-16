@@ -1,5 +1,6 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using SmartApiary.Infrastructure;
 using SmartApiary.Infrastructure.Persistence;
@@ -101,6 +102,15 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors();
 app.UseHttpsRedirection();
+
+var mediaRoot = Path.Combine(app.Environment.ContentRootPath, "wwwroot", "media");
+Directory.CreateDirectory(mediaRoot);
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(mediaRoot),
+    RequestPath = "/media"
+});
+
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

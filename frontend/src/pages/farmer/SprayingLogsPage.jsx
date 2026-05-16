@@ -1,17 +1,42 @@
 import { useEffect, useState } from "react";
 import { getParcels } from "../../services/parcelService";
-import { getSprayingLogs } from "../../services/sprayingService";
+import { getSprayingLogs, exportSprayingLogsPdf } from "../../services/sprayingService";
 
 export default function SprayingLogsPage() {
   const [parcels, setParcels] = useState([]);
   const [logs, setLogs] = useState([]);
   const [filters, setFilters] = useState({ parcelId: "", from: "", to: "" });
+  const [exporting, setExporting] = useState(false);
 
-  useEffect(() => { getParcels().then((r) => setParcels(r.data)); load(); }, []);
+  useEffect(() => {
+    getParcels().then((r) => setParcels(r.data));
+    load();
+  }, []);
 
   const load = async () => {
     const res = await getSprayingLogs(filters.parcelId || null, filters.from || null, filters.to || null);
     setLogs(res.data);
+  };
+
+  const handleExportPdf = async () => {
+    setExporting(true);
+    try {
+      const res = await exportSprayingLogsPdf(
+        filters.parcelId || null,
+        filters.from || null,
+        filters.to || null
+      );
+      const url = window.URL.createObjectURL(new Blob([res.data], { type: "application/pdf" }));
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `karton-prskanja-${new Date().toISOString().slice(0, 10)}.pdf`;
+      link.click();
+      window.URL.revokeObjectURL(url);
+    } catch {
+      alert("Greška pri izvozu PDF-a.");
+    } finally {
+      setExporting(false);
+    }
   };
 
   return (
@@ -28,8 +53,14 @@ export default function SprayingLogsPage() {
           </select>
           <input type="date" value={filters.from} onChange={(e) => setFilters({ ...filters, from: e.target.value })} />
           <input type="date" value={filters.to} onChange={(e) => setFilters({ ...filters, to: e.target.value })} />
-          <button className="btn-primary" onClick={load}>Filtriraj</button>
+          <button type="button" className="btn-primary" onClick={load}>Filtriraj</button>
+          <button type="button" className="btn-secondary" onClick={handleExportPdf} disabled={exporting}>
+            {exporting ? "Izvoz..." : "Izvezi PDF"}
+          </button>
         </div>
+        <p className="card-meta" style={{ marginTop: 12, marginBottom: 0 }}>
+          Završeni tretmani se automatski evidentiraju nakon isteka zakazanog trajanja.
+        </p>
       </div>
 
       <div className="card">
@@ -59,7 +90,11 @@ export default function SprayingLogsPage() {
                 </tr>
               ))}
               {logs.length === 0 && (
-                <tr><td colSpan="7" style={{ textAlign: "center", color: "var(--text-muted)" }}>Nema zapisa za odabrane filtere.</td></tr>
+                <tr>
+                  <td colSpan="7" style={{ textAlign: "center", color: "var(--text-muted)" }}>
+                    Nema zapisa za odabrane filtere.
+                  </td>
+                </tr>
               )}
             </tbody>
           </table>

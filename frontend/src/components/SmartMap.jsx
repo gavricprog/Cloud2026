@@ -1,11 +1,12 @@
 import { useEffect, useMemo } from "react";
 import { MapContainer, Marker, Popup, TileLayer, useMap, useMapEvents } from "react-leaflet";
 import L from "leaflet";
+import { cropMarkerHtml } from "../utils/cropIcons";
 
 const DEFAULT_CENTER = [44.0165, 21.0059];
 const DEFAULT_ZOOM = 7;
 
-const apiaryIcon = L.divIcon({
+const defaultApiaryIcon = L.divIcon({
   className: "map-marker map-marker-apiary",
   html: "<span>PC</span>",
   iconSize: [32, 32],
@@ -13,7 +14,7 @@ const apiaryIcon = L.divIcon({
   popupAnchor: [0, -30],
 });
 
-const parcelIcon = L.divIcon({
+const parcelFallbackIcon = L.divIcon({
   className: "map-marker map-marker-parcel",
   html: "<span>PA</span>",
   iconSize: [32, 32],
@@ -29,8 +30,52 @@ const selectedIcon = L.divIcon({
   popupAnchor: [0, -30],
 });
 
+const iconCache = new Map();
+
 function isValidCoordinate(latitude, longitude) {
   return Number.isFinite(latitude) && Number.isFinite(longitude);
+}
+
+function getApiaryIcon(apiary) {
+  if (apiary.thumbnailUrl) {
+    const key = `thumb-${apiary.thumbnailUrl}`;
+    if (!iconCache.has(key)) {
+      iconCache.set(
+        key,
+        L.icon({
+          iconUrl: apiary.thumbnailUrl,
+          iconSize: [40, 40],
+          iconAnchor: [20, 40],
+          popupAnchor: [0, -36],
+          className: "map-marker-apiary-image",
+        })
+      );
+    }
+    return iconCache.get(key);
+  }
+  return defaultApiaryIcon;
+}
+
+function getParcelIcon(parcel, selectedParcelId, useCropIcons) {
+  const crop = parcel.currentCrop || parcel.crop;
+  const selected = selectedParcelId && parcel.id === selectedParcelId;
+  if (useCropIcons && crop?.cropType) {
+    const key = `${crop.cropType}-${selected}`;
+    if (!iconCache.has(key)) {
+      iconCache.set(
+        key,
+        L.divIcon({
+          className: "map-marker map-marker-crop-wrap",
+          html: cropMarkerHtml(crop.cropType, selected),
+          iconSize: [36, 36],
+          iconAnchor: [18, 36],
+          popupAnchor: [0, -32],
+        })
+      );
+    }
+    return iconCache.get(key);
+  }
+  return parcelFallbackIcon;
 }
 
 function FitMapBounds({ points }) {
@@ -38,12 +83,10 @@ function FitMapBounds({ points }) {
 
   useEffect(() => {
     if (points.length === 0) return;
-
     if (points.length === 1) {
       map.setView(points[0], 12);
       return;
     }
-
     map.fitBounds(points, { padding: [32, 32], maxZoom: 13 });
   }, [map, points]);
 
@@ -59,7 +102,6 @@ function LocationPicker({ onSelect }) {
       });
     },
   });
-
   return null;
 }
 
@@ -71,7 +113,10 @@ export default function SmartMap({
   apiaries = [],
   parcels = [],
   selectedLocation = null,
+  selectedParcelId = null,
   onLocationSelect,
+  onParcelSelect,
+  useCropIcons = true,
   height = 420,
 }) {
   const markers = useMemo(() => {
@@ -117,21 +162,31 @@ export default function SmartMap({
         {markers.map((marker) => {
           const isApiary = marker.type === "apiary";
           const crop = !isApiary ? cropFor(marker.item) : null;
+          const icon = isApiary
+            ? getApiaryIcon(marker.item)
+            : getParcelIcon(marker.item, selectedParcelId, useCropIcons);
 
           return (
             <Marker
               key={`${marker.type}-${marker.item.id}`}
               position={marker.position}
-              icon={isApiary ? apiaryIcon : parcelIcon}
+              icon={icon}
+              eventHandlers={
+                !isApiary && onParcelSelect
+                  ? {
+                      click: () => onParcelSelect(marker.item),
+                    }
+                  : undefined
+              }
             >
               <Popup>
                 <strong>{marker.item.name}</strong>
                 <br />
                 {isApiary ? (
                   <>
-                    Pcelinjak
+                    Pčelinjak
                     <br />
-                    Kosnice: {marker.item.hiveCount ?? 0}
+                    Košnice: {marker.item.hiveCount ?? 0}
                     {marker.item.description && (
                       <>
                         <br />
@@ -164,6 +219,12 @@ export default function SmartMap({
                       <>
                         <br />
                         Telefon: {marker.item.ownerPhone}
+                      </>
+                    )}
+                    {onParcelSelect && (
+                      <>
+                        <br />
+                        <em>Klik na marker bira parcelu</em>
                       </>
                     )}
                   </>
