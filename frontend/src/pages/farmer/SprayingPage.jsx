@@ -1,6 +1,14 @@
 import { useEffect, useState } from "react";
 import { getParcels } from "../../services/parcelService";
-import { getAnnouncements, createAnnouncement, cancelAnnouncement } from "../../services/sprayingService";
+import {
+  getAnnouncements,
+  createAnnouncement,
+  updateAnnouncement,
+  cancelAnnouncement,
+  getNotificationStatus,
+} from "../../services/sprayingService";
+import Modal from "../../components/Modal";
+import { toDatetimeLocalValue } from "../../utils/datetime";
 
 const statusLabel = { Scheduled: "Zakazano", Completed: "Završeno", Cancelled: "Otkazano" };
 const statusBadge = { Scheduled: "badge-yellow", Completed: "badge-green", Cancelled: "badge-red" };
@@ -10,6 +18,11 @@ export default function SprayingPage() {
   const [announcements, setAnnouncements] = useState([]);
   const [form, setForm] = useState({ parcelId: "", plannedStartTime: "", durationHours: 1, substanceType: "" });
   const [error, setError] = useState("");
+  const [editing, setEditing] = useState(null);
+  const [editForm, setEditForm] = useState({ plannedStartTime: "", durationHours: 1, substanceType: "" });
+  const [editError, setEditError] = useState("");
+  const [notificationModal, setNotificationModal] = useState(null);
+  const [notificationLoading, setNotificationLoading] = useState(false);
 
   useEffect(() => {
     getParcels().then((r) => setParcels(r.data));
@@ -25,12 +38,56 @@ export default function SprayingPage() {
     e.preventDefault();
     setError("");
     try {
-      const res = await createAnnouncement({ ...form, durationHours: parseInt(form.durationHours) });
+      const res = await createAnnouncement({ ...form, durationHours: parseInt(form.durationHours, 10) });
       alert(`Prskanje zakazano. Obavešteno pčelara: ${res.data.notifiedBeekeeperCount}`);
       setForm({ parcelId: "", plannedStartTime: "", durationHours: 1, substanceType: "" });
       load();
     } catch (err) {
       setError(err.response?.data?.message || "Greška pri zakazivanju prskanja.");
+    }
+  };
+
+  const openEdit = (announcement) => {
+    setEditing(announcement);
+    setEditForm({
+      plannedStartTime: toDatetimeLocalValue(announcement.plannedStartTime),
+      durationHours: announcement.durationHours,
+      substanceType: announcement.substanceType || "",
+    });
+    setEditError("");
+  };
+
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    setEditError("");
+    try {
+      await updateAnnouncement(editing.id, {
+        plannedStartTime: editForm.plannedStartTime,
+        durationHours: parseInt(editForm.durationHours, 10),
+        substanceType: editForm.substanceType || null,
+      });
+      setEditing(null);
+      alert("Termin je pomeren. Obližnji pčelari su obavešteni o izmeni.");
+      load();
+    } catch (err) {
+      setEditError(err.response?.data?.message || "Greška pri izmeni termina.");
+    }
+  };
+
+  const openNotificationStatus = async (announcement) => {
+    setNotificationModal({ loading: true, announcement });
+    setNotificationLoading(true);
+    try {
+      const res = await getNotificationStatus(announcement.id);
+      setNotificationModal({ loading: false, announcement, status: res.data });
+    } catch {
+      setNotificationModal({
+        loading: false,
+        announcement,
+        error: "Greška pri učitavanju statusa obaveštenja.",
+      });
+    } finally {
+      setNotificationLoading(false);
     }
   };
 
@@ -47,11 +104,29 @@ export default function SprayingPage() {
           <div className="form-row">
             <select value={form.parcelId} onChange={(e) => setForm({ ...form, parcelId: e.target.value })} required>
               <option value="">-- Odaberi parcelu --</option>
-              {parcels.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
+              {parcels.map((p) => (
+                <option key={p.id} value={p.id}>{p.name}</option>
+              ))}
             </select>
-            <input type="datetime-local" value={form.plannedStartTime} onChange={(e) => setForm({ ...form, plannedStartTime: e.target.value })} required />
-            <input type="number" min="1" placeholder="Trajanje (sati)" value={form.durationHours} onChange={(e) => setForm({ ...form, durationHours: e.target.value })} required />
-            <input placeholder="Preparat (opciono)" value={form.substanceType} onChange={(e) => setForm({ ...form, substanceType: e.target.value })} />
+            <input
+              type="datetime-local"
+              value={form.plannedStartTime}
+              onChange={(e) => setForm({ ...form, plannedStartTime: e.target.value })}
+              required
+            />
+            <input
+              type="number"
+              min="1"
+              placeholder="Trajanje (sati)"
+              value={form.durationHours}
+              onChange={(e) => setForm({ ...form, durationHours: e.target.value })}
+              required
+            />
+            <input
+              placeholder="Preparat (opciono)"
+              value={form.substanceType}
+              onChange={(e) => setForm({ ...form, substanceType: e.target.value })}
+            />
             <button type="submit" className="btn-primary">Zakaži prskanje</button>
           </div>
         </form>
@@ -76,12 +151,36 @@ export default function SprayingPage() {
                   <td><strong>{a.parcelName}</strong></td>
                   <td>{new Date(a.plannedStartTime).toLocaleString("sr-RS")}</td>
                   <td>{a.durationHours}h</td>
-                  <td><span className={`badge ${statusBadge[a.status] || "badge-yellow"}`}>{statusLabel[a.status] || a.status}</span></td>
+                  <td>
+                    <span className={`badge ${statusBadge[a.status] || "badge-yellow"}`}>
+                      {statusLabel[a.status] || a.status}
+                    </span>
+                  </td>
                   <td>{a.notifiedBeekeeperCount}</td>
                   <td>
-                    {a.status === "Scheduled" && (
-                      <button className="btn-danger btn-sm" onClick={() => cancelAnnouncement(a.id).then(load)}>Otkaži</button>
-                    )}
+                    <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                      <button
+                        type="button"
+                        className="btn-secondary btn-sm"
+                        onClick={() => openNotificationStatus(a)}
+                      >
+                        Status
+                      </button>
+                      {a.status === "Scheduled" && (
+                        <>
+                          <button type="button" className="btn-secondary btn-sm" onClick={() => openEdit(a)}>
+                            Pomeri
+                          </button>
+                          <button
+                            type="button"
+                            className="btn-danger btn-sm"
+                            onClick={() => cancelAnnouncement(a.id).then(load)}
+                          >
+                            Otkaži
+                          </button>
+                        </>
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -89,6 +188,69 @@ export default function SprayingPage() {
           </table>
         </div>
       </div>
+
+      {editing && (
+        <Modal title={`Pomeri prskanje — ${editing.parcelName}`} onClose={() => setEditing(null)}>
+          {editError && <div className="alert-error">{editError}</div>}
+          <form onSubmit={handleUpdate}>
+            <div className="form-group">
+              <label>Novi datum i vreme početka</label>
+              <input
+                type="datetime-local"
+                value={editForm.plannedStartTime}
+                onChange={(e) => setEditForm({ ...editForm, plannedStartTime: e.target.value })}
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label>Trajanje (sati)</label>
+              <input
+                type="number"
+                min="1"
+                value={editForm.durationHours}
+                onChange={(e) => setEditForm({ ...editForm, durationHours: e.target.value })}
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label>Preparat (opciono)</label>
+              <input
+                value={editForm.substanceType}
+                onChange={(e) => setEditForm({ ...editForm, substanceType: e.target.value })}
+                placeholder="Naziv preparata"
+              />
+            </div>
+            <div style={{ display: "flex", gap: 8, justifyContent: "flex-end", marginTop: 16 }}>
+              <button type="button" className="btn-secondary" onClick={() => setEditing(null)}>Otkaži</button>
+              <button type="submit" className="btn-primary">Sačuvaj i obavesti pčelare</button>
+            </div>
+          </form>
+        </Modal>
+      )}
+
+      {notificationModal && (
+        <Modal
+          title={`Status obaveštenja — ${notificationModal.announcement.parcelName}`}
+          onClose={() => setNotificationModal(null)}
+        >
+          {notificationModal.loading || notificationLoading ? (
+            <p>Učitavanje...</p>
+          ) : notificationModal.error ? (
+            <div className="alert-error">{notificationModal.error}</div>
+          ) : (
+            <dl className="detail-list">
+              <dt>Parcela</dt>
+              <dd>{notificationModal.announcement.parcelName}</dd>
+              <dt>Planirani početak</dt>
+              <dd>{new Date(notificationModal.status.plannedStartTime).toLocaleString("sr-RS")}</dd>
+              <dt>Status najave</dt>
+              <dd>{statusLabel[notificationModal.status.status] || notificationModal.status.status}</dd>
+              <dt>Obavešteni pčelari (u radijusu 5 km)</dt>
+              <dd><strong>{notificationModal.status.notifiedBeekeeperCount}</strong></dd>
+            </dl>
+          )}
+        </Modal>
+      )}
     </div>
   );
 }

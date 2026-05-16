@@ -1,5 +1,7 @@
+import { useState } from "react";
 import { BrowserRouter, Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute";
+import BeekeeperSettingsModal from "./components/BeekeeperSettingsModal";
 import { Roles } from "./models";
 import { clearAuth, getUser } from "./utils/auth";
 
@@ -23,9 +25,11 @@ import SprayingLogsPage from "./pages/farmer/SprayingLogsPage";
 function NavBar() {
   const navigate = useNavigate();
   const user = getUser();
+  const [settingsOpen, setSettingsOpen] = useState(false);
   if (!user) return null;
   const handleLogout = () => { clearAuth(); navigate("/login"); };
   return (
+    <>
     <nav className="navbar">
       <span className="navbar-brand" style={{ cursor: "pointer" }} onClick={() => {
         if (user.role === Roles.Beekeeper) navigate("/apiaries");
@@ -34,12 +38,19 @@ function NavBar() {
       }}>🐝 Smart Apiary</span>
       <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
         {user.role === Roles.Beekeeper && (
-          <button className="btn-secondary btn-sm" onClick={() => navigate("/alerts")}>🔔 Upozorenja</button>
+          <>
+            <button type="button" className="btn-secondary btn-sm" onClick={() => setSettingsOpen(true)}>⚙ Podešavanja</button>
+            <button type="button" className="btn-secondary btn-sm" onClick={() => navigate("/alerts")}>🔔 Upozorenja</button>
+          </>
         )}
         <span className="navbar-user">{user.fullName} · {user.role}</span>
-        <button onClick={handleLogout} className="btn-danger btn-sm">Odjavi se</button>
+        <button type="button" onClick={handleLogout} className="btn-danger btn-sm">Odjavi se</button>
       </div>
     </nav>
+    {settingsOpen && user.role === Roles.Beekeeper && (
+      <BeekeeperSettingsModal onClose={() => setSettingsOpen(false)} />
+    )}
+    </>
   );
 }
 

@@ -1,11 +1,13 @@
 import { useCallback, useEffect, useState } from "react";
-import { getParcels, createParcel, setCrop, deleteCrop } from "../../services/parcelService";
+import { getParcels, createParcel, updateParcel, setCrop, deleteCrop } from "../../services/parcelService";
 import { CropTypes } from "../../models";
 import SmartMap from "../../components/SmartMap";
 
 export default function ParcelsPage() {
   const [parcels, setParcels] = useState([]);
   const [form, setForm] = useState({ name: "", latitude: "", longitude: "" });
+  const [editingId, setEditingId] = useState(null);
+  const [editForm, setEditForm] = useState({ name: "", latitude: "", longitude: "" });
   const [cropForm, setCropForm] = useState({ parcelId: null, cropType: CropTypes[0], bloomingPeriod: "", additionalInfo: "" });
 
   const load = useCallback(async () => {
@@ -15,15 +17,10 @@ export default function ParcelsPage() {
 
   useEffect(() => {
     let ignore = false;
-
     getParcels().then((res) => {
-      if (ignore) return;
-      setParcels(res.data);
+      if (!ignore) setParcels(res.data);
     });
-
-    return () => {
-      ignore = true;
-    };
+    return () => { ignore = true; };
   }, []);
 
   const handleCreate = async (e) => {
@@ -33,9 +30,33 @@ export default function ParcelsPage() {
     load();
   };
 
+  const startEdit = (p) => {
+    setEditingId(p.id);
+    setEditForm({
+      name: p.name,
+      latitude: p.latitude.toString(),
+      longitude: p.longitude.toString(),
+    });
+  };
+
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    await updateParcel(editingId, {
+      name: editForm.name,
+      latitude: parseFloat(editForm.latitude),
+      longitude: parseFloat(editForm.longitude),
+    });
+    setEditingId(null);
+    load();
+  };
+
   const handleSetCrop = async (e) => {
     e.preventDefault();
-    await setCrop(cropForm.parcelId, { cropType: cropForm.cropType, bloomingPeriod: cropForm.bloomingPeriod, additionalInfo: cropForm.additionalInfo });
+    await setCrop(cropForm.parcelId, {
+      cropType: cropForm.cropType,
+      bloomingPeriod: cropForm.bloomingPeriod,
+      additionalInfo: cropForm.additionalInfo,
+    });
     setCropForm({ parcelId: null, cropType: CropTypes[0], bloomingPeriod: "", additionalInfo: "" });
     load();
   };
@@ -87,16 +108,33 @@ export default function ParcelsPage() {
             {p.currentCrop ? (
               <div style={{ marginBottom: 12 }}>
                 <span className="badge badge-green">{p.currentCrop.cropType}</span>
-                {p.currentCrop.bloomingPeriod && <span style={{ fontSize: 13, marginLeft: 8 }}>Cvetanje: {p.currentCrop.bloomingPeriod}</span>}
+                {p.currentCrop.bloomingPeriod && (
+                  <span style={{ fontSize: 13, marginLeft: 8 }}>Cvetanje: {p.currentCrop.bloomingPeriod}</span>
+                )}
               </div>
             ) : (
               <div style={{ marginBottom: 12, fontSize: 13, color: "var(--text-muted)" }}>Bez kulture</div>
             )}
+            {editingId === p.id && (
+              <form onSubmit={handleUpdate} style={{ marginTop: 10 }}>
+                <div className="form-row">
+                  <input placeholder="Naziv" value={editForm.name} onChange={(e) => setEditForm({ ...editForm, name: e.target.value })} required />
+                  <input placeholder="Geografska širina" value={editForm.latitude} onChange={(e) => setEditForm({ ...editForm, latitude: e.target.value })} required />
+                  <input placeholder="Geografska dužina" value={editForm.longitude} onChange={(e) => setEditForm({ ...editForm, longitude: e.target.value })} required />
+                </div>
+                <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
+                  <button type="submit" className="btn-primary btn-sm">Sačuvaj koordinate</button>
+                  <button type="button" className="btn-secondary btn-sm" onClick={() => setEditingId(null)}>Otkaži</button>
+                </div>
+              </form>
+            )}
             <div className="card-actions">
-              {p.currentCrop
-                ? <button className="btn-secondary btn-sm" onClick={() => deleteCrop(p.id).then(load)}>Ukloni kulturu</button>
-                : <button className="btn-secondary btn-sm" onClick={() => setCropForm({ ...cropForm, parcelId: p.id })}>Dodaj kulturu</button>
-              }
+              <button type="button" className="btn-secondary btn-sm" onClick={() => startEdit(p)}>Izmeni lokaciju</button>
+              {p.currentCrop ? (
+                <button type="button" className="btn-secondary btn-sm" onClick={() => deleteCrop(p.id).then(load)}>Ukloni kulturu</button>
+              ) : (
+                <button type="button" className="btn-secondary btn-sm" onClick={() => setCropForm({ ...cropForm, parcelId: p.id })}>Dodaj kulturu</button>
+              )}
             </div>
           </div>
         ))}
