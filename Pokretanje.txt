@@ -1,0 +1,91 @@
+azurite --silent --location C:\azurite --debug C:\azurite\debug.log -POKRETANJE AZURITE
+npm install -g azurite
+
+
+==========================================
+  SMARTAPIARY — KOMANDE ZA POKRETANJE
+==========================================
+
+--- REDOSLIJED POKRETANJA ---
+1. Azurite (Azure Storage emulator)
+2. Backend (Visual Studio F5 ili dotnet run)
+3. Frontend (npm run dev)
+
+
+--- AZURITE ---
+
+Instalacija (jednom):
+  npm install -g azurite
+
+Pokretanje:
+  azurite
+
+Provjera da li radi (u browseru):
+  http://127.0.0.1:10002/devstoreaccount1
+  (ako vrati XML = radi)
+
+
+--- BACKEND ---
+
+Build cijelog projekta:
+  cd C:\Users\Bogdan\Desktop\marCloud\Cloud2026
+  dotnet build SmartApiary.sln
+
+Build samo Infrastructure:
+  cd SmartApiary.Infrastructure
+  dotnet build
+
+Pokretanje API-ja:
+  cd SmartApiary.API
+  dotnet run
+  (ili F5 u Visual Studio)
+
+Swagger:
+  https://localhost:7014/swagger
+
+
+--- EF CORE MIGRACIJE ---
+(pokretati iz SmartApiary.Infrastructure foldera)
+
+Nova migracija:
+  dotnet ef migrations add ImeMigracije --startup-project ..\SmartApiary.API
+
+Primjena migracija na bazu:
+  dotnet ef database update --startup-project ..\SmartApiary.API
+
+
+--- FRONTEND ---
+
+  cd C:\Users\Bogdan\Desktop\marCloud\Cloud2026\frontend
+
+Instalacija paketa (jednom):
+  npm install
+
+Pokretanje dev servera:
+  npm run dev
+  (otvara se na http://localhost:5173)
+
+Build za produkciju:
+  npm run build
+
+Lint provjera:
+  npm run lint
+
+
+--- AZURE STORAGE EXPLORER ---
+
+Provjera Table Storage (telemetrija):
+  Local & Attached → Azurite → Tables → TelemetryReadings
+
+Provjera Blob Storage (slike):
+  Local & Attached → Azurite → Blob Containers → apiary-images
+
+
+--- LOGIN PODACI (lokalno) ---
+
+Admin:
+  Email: admin@smartapiary.com
+  Lozinka: Admin123!
+
+
+==========================================

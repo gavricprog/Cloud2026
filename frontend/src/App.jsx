@@ -43,6 +43,13 @@ function NavBar() {
             <button type="button" className="btn-secondary btn-sm" onClick={() => navigate("/alerts")}>🔔 Upozorenja</button>
           </>
         )}
+        {user.role === Roles.Farmer && (
+          <>
+            <button type="button" className="btn-secondary btn-sm" onClick={() => navigate("/parcels")}>🌾 Parcele</button>
+            <button type="button" className="btn-secondary btn-sm" onClick={() => navigate("/spraying")}>🌿 Prskanje</button>
+            <button type="button" className="btn-secondary btn-sm" onClick={() => navigate("/spraying/logs")}>📋 Karton prskanja</button>
+          </>
+        )}
         <span className="navbar-user">{user.fullName} · {user.role}</span>
         <button type="button" onClick={handleLogout} className="btn-danger btn-sm">Odjavi se</button>
       </div>

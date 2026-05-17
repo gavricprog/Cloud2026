@@ -60,7 +60,7 @@ public class SprayingController : ControllerBase
             Status = SprayingStatus.Scheduled
         };       
 
-        var weatherWarning = await CheckWeatherWarning(parcel.Latitude, parcel.Longitude);
+        var weatherWarning = await CheckWeatherWarning(parcel.Latitude, parcel.Longitude, request.PlannedStartTime);
 
         _db.SprayingAnnouncements.Add(announcement);
 
@@ -77,34 +77,51 @@ public class SprayingController : ControllerBase
         });
     }
 
-    private async Task<string?> CheckWeatherWarning(double latitude, double longitude)
+    private async Task<string?> CheckWeatherWarning(double latitude, double longitude, DateTime plannedStartTime)
     {
         var apiKey = _config["OpenWeatherMap:ApiKey"];
+        if (string.IsNullOrWhiteSpace(apiKey)) return null;
 
-        using var client = new HttpClient();
-
-        var url =
-            $"https://api.openweathermap.org/data/2.5/weather?lat={latitude}&lon={longitude}&appid={apiKey}&units=metric";
-
-        var response = await client.GetStringAsync(url);
-
-        using var json = JsonDocument.Parse(response);
-
-        var root = json.RootElement;
-
-        var windSpeed = root
-            .GetProperty("wind")
-            .GetProperty("speed")
-            .GetDouble();
-
-        bool hasRain = root.TryGetProperty("rain", out _);
-
-        if (windSpeed > 5 || hasRain)
+        try
         {
-            return "Loši vremenski uslovi – preporučuje se pomeranje termina.";
-        }
+            using var client = new HttpClient();
 
-        return null;
+            // Forecast API vraća prognozu na svakih 3h za narednih 5 dana
+            var url = $"https://api.openweathermap.org/data/2.5/forecast?lat={latitude}&lon={longitude}&appid={apiKey}&units=metric";
+            var response = await client.GetStringAsync(url);
+
+            using var json = JsonDocument.Parse(response);
+            var list = json.RootElement.GetProperty("list");
+
+            // Pronađi vremenski slot najbliži zakazanom terminu
+            JsonElement? closest = null;
+            double minDiff = double.MaxValue;
+
+            foreach (var item in list.EnumerateArray())
+            {
+                var dt = DateTimeOffset.FromUnixTimeSeconds(item.GetProperty("dt").GetInt64()).UtcDateTime;
+                var diff = Math.Abs((dt - plannedStartTime.ToUniversalTime()).TotalSeconds);
+                if (diff < minDiff)
+                {
+                    minDiff = diff;
+                    closest = item;
+                }
+            }
+
+            if (closest == null) return null;
+
+            var windSpeed = closest.Value.GetProperty("wind").GetProperty("speed").GetDouble();
+            bool hasRain = closest.Value.TryGetProperty("rain", out _);
+
+            if (windSpeed > 5 || hasRain)
+                return "Loši vremenski uslovi – preporučuje se pomeranje termina.";
+
+            return null;
+        }
+        catch
+        {
+            return null;
+        }
     }
 
 
@@ -137,10 +154,12 @@ public class SprayingController : ControllerBase
         announcement.SubstanceType = request.SubstanceType;
         announcement.UpdatedAt = DateTime.UtcNow;
 
+        var weatherWarning = await CheckWeatherWarning(announcement.Parcel.Latitude, announcement.Parcel.Longitude, request.PlannedStartTime);
+
         await NotifyNearbyBeekeepersRescheduled(announcement, announcement.Parcel);
         await _db.SaveChangesAsync();
 
-        return NoContent();
+        return Ok(new { WeatherWarning = weatherWarning });
     }
 
     [HttpDelete("{id:guid}")]

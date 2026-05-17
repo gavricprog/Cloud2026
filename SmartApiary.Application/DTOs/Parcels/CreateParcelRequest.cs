@@ -5,6 +5,7 @@ public class CreateParcelRequest
     public string Name { get; set; } = string.Empty;
     public double Latitude { get; set; }
     public double Longitude { get; set; }
+    public double? AreaHectares { get; set; }
 }
 
 public class UpdateParcelRequest
@@ -12,6 +13,7 @@ public class UpdateParcelRequest
     public string Name { get; set; } = string.Empty;
     public double Latitude { get; set; }
     public double Longitude { get; set; }
+    public double? AreaHectares { get; set; }
 }
 
 public class SetCropRequest

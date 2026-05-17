@@ -25,6 +25,23 @@
           }
         }
       },
+      "Azure.Data.Tables/12.9.0": {
+        "type": "package",
+        "dependencies": {
+          "Azure.Core": "1.41.0",
+          "System.Text.Json": "4.7.2"
+        },
+        "compile": {
+          "lib/netstandard2.0/Azure.Data.Tables.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/Azure.Data.Tables.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Azure.Identity/1.7.0": {
         "type": "package",
         "dependencies": {
@@ -1794,6 +1811,22 @@
         "lib/net6.0/Azure.Core.xml",
         "lib/netstandard2.0/Azure.Core.dll",
         "lib/netstandard2.0/Azure.Core.xml"
+      ]
+    },
+    "Azure.Data.Tables/12.9.0": {
+      "sha512": "oq3oSJQ9bCTfpBGs5EA+2mb0hjQIrRGeFukQFsV7VaTFzES48kWXD3yy5SpVp/jmdnh4ryhmyB4a1ABBCzATRg==",
+      "type": "package",
+      "path": "azure.data.tables/12.9.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "CHANGELOG.md",
+        "README.md",
+        "azure.data.tables.12.9.0.nupkg.sha512",
+        "azure.data.tables.nuspec",
+        "azureicon.png",
+        "lib/netstandard2.0/Azure.Data.Tables.dll",
+        "lib/netstandard2.0/Azure.Data.Tables.xml"
       ]
     },
     "Azure.Identity/1.7.0": {
@@ -4429,6 +4462,7 @@
   },
   "projectFileDependencyGroups": {
     "net8.0": [
+      "Azure.Data.Tables >= 12.9.0",
       "Azure.Storage.Blobs >= 12.22.2",
       "Microsoft.AspNetCore.Identity.EntityFrameworkCore >= 8.0.0",
       "Microsoft.EntityFrameworkCore.Design >= 8.0.0",
@@ -4443,42 +4477,44 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\alfak\\.nuget\\packages\\": {},
+    "C:\\Users\\Bogdan\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\FAKS\\CLOUD\\Cloud2026\\SmartApiary.Infrastructure\\SmartApiary.Infrastructure.csproj",
+      "projectUniqueName": "C:\\Users\\Bogdan\\Desktop\\marCloud\\Cloud2026\\SmartApiary.Infrastructure\\SmartApiary.Infrastructure.csproj",
       "projectName": "SmartApiary.Infrastructure",
-      "projectPath": "E:\\FAKS\\CLOUD\\Cloud2026\\SmartApiary.Infrastructure\\SmartApiary.Infrastructure.csproj",
-      "packagesPath": "C:\\Users\\alfak\\.nuget\\packages\\",
-      "outputPath": "E:\\FAKS\\CLOUD\\Cloud2026\\SmartApiary.Infrastructure\\obj\\",
+      "projectPath": "C:\\Users\\Bogdan\\Desktop\\marCloud\\Cloud2026\\SmartApiary.Infrastructure\\SmartApiary.Infrastructure.csproj",
+      "packagesPath": "C:\\Users\\Bogdan\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Bogdan\\Desktop\\marCloud\\Cloud2026\\SmartApiary.Infrastructure\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\alfak\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Bogdan\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\ServiceFabricSDK.config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\Microsoft SDKs\\Service Fabric\\packages": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "E:\\FAKS\\CLOUD\\Cloud2026\\SmartApiary.Application\\SmartApiary.Application.csproj": {
-              "projectPath": "E:\\FAKS\\CLOUD\\Cloud2026\\SmartApiary.Application\\SmartApiary.Application.csproj"
+            "C:\\Users\\Bogdan\\Desktop\\marCloud\\Cloud2026\\SmartApiary.Application\\SmartApiary.Application.csproj": {
+              "projectPath": "C:\\Users\\Bogdan\\Desktop\\marCloud\\Cloud2026\\SmartApiary.Application\\SmartApiary.Application.csproj"
             },
-            "E:\\FAKS\\CLOUD\\Cloud2026\\SmartApiary.Domain\\SmartApiary.Domain.csproj": {
-              "projectPath": "E:\\FAKS\\CLOUD\\Cloud2026\\SmartApiary.Domain\\SmartApiary.Domain.csproj"
+            "C:\\Users\\Bogdan\\Desktop\\marCloud\\Cloud2026\\SmartApiary.Domain\\SmartApiary.Domain.csproj": {
+              "projectPath": "C:\\Users\\Bogdan\\Desktop\\marCloud\\Cloud2026\\SmartApiary.Domain\\SmartApiary.Domain.csproj"
             }
           }
         }
@@ -4491,14 +4527,18 @@
       "restoreAuditProperties": {
         "enableAudit": "true",
         "auditLevel": "low",
-        "auditMode": "all"
+        "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "9.0.100"
+      "SdkAnalysisLevel": "9.0.300"
     },
     "frameworks": {
       "net8.0": {
         "targetAlias": "net8.0",
         "dependencies": {
+          "Azure.Data.Tables": {
+            "target": "Package",
+            "version": "[12.9.0, )"
+          },
           "Azure.Storage.Blobs": {
             "target": "Package",
             "version": "[12.22.2, )"
@@ -4556,97 +4596,17 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.313/PortableRuntimeIdentifierGraph.json"
       }
     }
   },
   "logs": [
-    {
-      "code": "NU1903",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Package 'Azure.Identity' 1.7.0 has a known high severity vulnerability, https://github.com/advisories/GHSA-5mfx-4wcx-rv27",
-      "libraryId": "Azure.Identity",
-      "targetGraphs": [
-        "net8.0"
-      ]
-    },
-    {
-      "code": "NU1902",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Package 'Azure.Identity' 1.7.0 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-m5vv-6r4h-3vj9",
-      "libraryId": "Azure.Identity",
-      "targetGraphs": [
-        "net8.0"
-      ]
-    },
-    {
-      "code": "NU1902",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Package 'Azure.Identity' 1.7.0 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-wvxc-855f-jvrv",
-      "libraryId": "Azure.Identity",
-      "targetGraphs": [
-        "net8.0"
-      ]
-    },
-    {
-      "code": "NU1903",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Package 'Microsoft.Data.SqlClient' 5.1.1 has a known high severity vulnerability, https://github.com/advisories/GHSA-98g6-xh36-x2p7",
-      "libraryId": "Microsoft.Data.SqlClient",
-      "targetGraphs": [
-        "net8.0"
-      ]
-    },
-    {
-      "code": "NU1903",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Package 'Microsoft.Extensions.Caching.Memory' 8.0.0 has a known high severity vulnerability, https://github.com/advisories/GHSA-qj66-m88j-hmgj",
-      "libraryId": "Microsoft.Extensions.Caching.Memory",
-      "targetGraphs": [
-        "net8.0"
-      ]
-    },
     {
       "code": "NU1902",
       "level": "Warning",
       "warningLevel": 1,
       "message": "Package 'SixLabors.ImageSharp' 3.1.7 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-rxmq-m78w-7wmc",
       "libraryId": "SixLabors.ImageSharp",
-      "targetGraphs": [
-        "net8.0"
-      ]
-    },
-    {
-      "code": "NU1903",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Package 'System.Formats.Asn1' 5.0.0 has a known high severity vulnerability, https://github.com/advisories/GHSA-447r-wph3-92pm",
-      "libraryId": "System.Formats.Asn1",
-      "targetGraphs": [
-        "net8.0"
-      ]
-    },
-    {
-      "code": "NU1903",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Package 'System.Text.Json' 8.0.0 has a known high severity vulnerability, https://github.com/advisories/GHSA-8g4q-xg66-9fp4",
-      "libraryId": "System.Text.Json",
-      "targetGraphs": [
-        "net8.0"
-      ]
-    },
-    {
-      "code": "NU1903",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Package 'System.Text.Json' 8.0.0 has a known high severity vulnerability, https://github.com/advisories/GHSA-hh2w-p6rv-4g7w",
-      "libraryId": "System.Text.Json",
       "targetGraphs": [
         "net8.0"
       ]

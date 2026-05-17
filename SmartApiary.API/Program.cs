@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using SmartApiary.Infrastructure;
 using SmartApiary.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
+using SmartApiary.API.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -55,6 +56,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 builder.Services.AddAuthorization();
+builder.Services.AddSignalR();
 
 builder.Services.AddCors(options =>
 {
@@ -115,5 +117,6 @@ app.UseStaticFiles(new StaticFileOptions
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+app.MapHub<TelemetryHub>("/hubs/telemetry");
 
 app.Run();

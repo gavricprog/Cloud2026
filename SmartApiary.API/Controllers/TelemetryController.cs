@@ -8,6 +8,8 @@ using SmartApiary.Application.Interfaces;
 using SmartApiary.Domain.Entities;
 using SmartApiary.Domain.Enums;
 using SmartApiary.Infrastructure.Persistence;
+using SmartApiary.API.Hubs;
+using Microsoft.AspNetCore.SignalR;
 
 namespace SmartApiary.API.Controllers;
 
@@ -17,16 +19,22 @@ public class TelemetryController : ControllerBase
 {
     private readonly AppDbContext _db;
     private readonly IEmailService _emailService;
+    private readonly ITelemetryTableService _tableService;
+    private readonly IHubContext<TelemetryHub> _hub;
 
-    public TelemetryController(AppDbContext db, IEmailService emailService)
+    public TelemetryController(AppDbContext db, IEmailService emailService,
+        ITelemetryTableService tableService, IHubContext<TelemetryHub> hub)
     {
         _db = db;
         _emailService = emailService;
+        _tableService = tableService;
+        _hub = hub;
     }
 
     [HttpPost("ingest")]
     [AllowAnonymous]
-    public async Task<IActionResult> Ingest([FromHeader(Name = "X-Device-Token")] string deviceToken, [FromBody] TelemetryRequest request)
+    public async Task<IActionResult> Ingest([FromHeader(Name = "X-Device-Token")] string deviceToken,
+        [FromBody] TelemetryRequest request)
     {
         var device = await _db.IoTDevices
             .Include(d => d.Hive)
@@ -37,23 +45,28 @@ public class TelemetryController : ControllerBase
         if (device == null)
             return Unauthorized(new { message = "Nevažeći device token." });
 
-        var reading = new TelemetryReading
-        {
-            Id = Guid.NewGuid(),
-            HiveId = device.HiveId,
-            DeviceId = device.Id,
-            Weight = request.Weight,
-            Humidity = request.Humidity,
-            InternalTemperature = request.InternalTemperature,
-            BatteryLevel = request.BatteryLevel,
-            RecordedAt = request.RecordedAt
-        };
+        // Čuvaj merenje u Azure Table Storage
+        await _tableService.InsertReadingAsync(
+            device.HiveId, device.Id,
+            request.Weight, request.Humidity,
+            request.InternalTemperature, request.BatteryLevel,
+            request.RecordedAt);
 
-        _db.TelemetryReadings.Add(reading);
-
-        await CheckAnomalies(device, reading);
+        await CheckAnomalies(device, request);
 
         await _db.SaveChangesAsync();
+
+        // SignalR real-time update
+        var apiaryId = device.Hive.ApiaryId.ToString();
+        await _hub.Clients.Group($"apiary-{apiaryId}").SendAsync("TelemetryUpdate", new
+        {
+            weight = request.Weight,
+            humidity = request.Humidity,
+            internalTemperature = request.InternalTemperature,
+            batteryLevel = request.BatteryLevel,
+            recordedAt = request.RecordedAt
+        });
+
         return Ok(new { message = "Telemetrija primljena." });
     }
 
@@ -69,10 +82,8 @@ public class TelemetryController : ControllerBase
         var from = DateTime.UtcNow.AddDays(-days);
         var hiveIds = await _db.Hives.Where(h => h.ApiaryId == apiaryId).Select(h => h.Id).ToListAsync();
 
-        var readings = await _db.TelemetryReadings
-            .Where(t => hiveIds.Contains(t.HiveId) && t.RecordedAt >= from)
-            .OrderBy(t => t.RecordedAt)
-            .ToListAsync();
+        // Čitaj iz Azure Table Storage
+        var readings = await _tableService.GetReadingsForHivesAsync(hiveIds, from);
 
         var latestReading = readings.MaxBy(t => t.RecordedAt);
 
@@ -80,11 +91,13 @@ public class TelemetryController : ControllerBase
             .GroupBy(t => t.RecordedAt.Date)
             .Select(g =>
             {
-                var morning = g.Where(t => t.RecordedAt.Hour >= 7 && t.RecordedAt.Hour <= 9).MinBy(t => Math.Abs(t.RecordedAt.Hour - 8))
-                              ?? g.MinBy(t => t.RecordedAt); // fallback: prvo merenje dana
-                var evening = g.Where(t => t.RecordedAt.Hour >= 19 && t.RecordedAt.Hour <= 21).MinBy(t => Math.Abs(t.RecordedAt.Hour - 20))
-                              ?? g.MaxBy(t => t.RecordedAt); // fallback: poslednje merenje dana
-                var delta = (morning != null && evening != null && morning.Id != evening.Id)
+                var morning = g.Where(t => t.RecordedAt.Hour >= 7 && t.RecordedAt.Hour <= 9)
+                               .MinBy(t => Math.Abs(t.RecordedAt.Hour - 8))
+                               ?? g.MinBy(t => t.RecordedAt);
+                var evening = g.Where(t => t.RecordedAt.Hour >= 19 && t.RecordedAt.Hour <= 21)
+                               .MinBy(t => Math.Abs(t.RecordedAt.Hour - 20))
+                               ?? g.MaxBy(t => t.RecordedAt);
+                var delta = (morning != null && evening != null && morning.RecordedAt != evening.RecordedAt)
                     ? Math.Round(evening.Weight - morning.Weight, 2)
                     : 0;
                 return new DailyNectarDto { Date = g.Key, Delta = delta };
@@ -95,38 +108,18 @@ public class TelemetryController : ControllerBase
         return Ok(new TelemetryChartDto
         {
             DailyNectar = dailyNectar,
-            TemperatureHumidity = readings.Select(t => new TelemetryDto
-            {
-                Id = t.Id,
-                HiveId = t.HiveId,
-                Weight = t.Weight,
-                Humidity = t.Humidity,
-                InternalTemperature = t.InternalTemperature,
-                BatteryLevel = t.BatteryLevel,
-                RecordedAt = t.RecordedAt
-            }).ToList(),
-            LatestReading = latestReading == null ? null : new TelemetryDto
-            {
-                Id = latestReading.Id,
-                HiveId = latestReading.HiveId,
-                Weight = latestReading.Weight,
-                Humidity = latestReading.Humidity,
-                InternalTemperature = latestReading.InternalTemperature,
-                BatteryLevel = latestReading.BatteryLevel,
-                RecordedAt = latestReading.RecordedAt
-            }
+            TemperatureHumidity = readings,
+            LatestReading = latestReading
         });
     }
 
-    private async Task CheckAnomalies(IoTDevice device, TelemetryReading newReading)
+    private async Task CheckAnomalies(IoTDevice device, TelemetryRequest newReading)
     {
         var beekeeper = device.Hive.Apiary.Beekeeper;
         var fullName = $"{beekeeper.FirstName} {beekeeper.LastName}";
 
-        var previousReading = await _db.TelemetryReadings
-            .Where(t => t.HiveId == device.HiveId)
-            .OrderByDescending(t => t.RecordedAt)
-            .FirstOrDefaultAsync();
+        // Čitaj prethodno merenje iz Table Storage
+        var previousReading = await _tableService.GetLatestReadingAsync(device.HiveId);
 
         if (previousReading != null)
         {
@@ -162,13 +155,12 @@ public class TelemetryController : ControllerBase
                 HiveId = device.HiveId
             };
             _db.Alerts.Add(alert);
-
             device.BatteryAlertSent = true;
 
             await _emailService.SendAlertEmailAsync(
                 beekeeper.Email, fullName,
                 "Upozorenje: Nivo baterije",
-                $"<p>Baterija na paметnoj vagi u košnici <strong>{device.Hive.Label}</strong> je pala na <strong>{newReading.BatteryLevel:F0}%</strong>.</p><p>Zamenite bateriju što pre.</p>");
+                $"<p>Baterija na pametnoj vagi u košnici <strong>{device.Hive.Label}</strong> je pala na <strong>{newReading.BatteryLevel:F0}%</strong>.</p><p>Zamenite bateriju što pre.</p>");
         }
         else if (newReading.BatteryLevel >= 15 && device.BatteryAlertSent)
         {

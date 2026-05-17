@@ -19,6 +19,7 @@ public static class DependencyInjection
         services.AddScoped<IEmailService, EmailService>();
         services.AddScoped<IBlobStorageService, BlobStorageService>();
         services.AddScoped<ISprayingCompletionService, SprayingCompletionService>();
+        services.AddSingleton<ITelemetryTableService, TelemetryTableService>();
         services.AddHostedService<SprayingLogHostedService>();
 
         return services;

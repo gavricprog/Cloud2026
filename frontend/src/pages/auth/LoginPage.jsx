@@ -1,13 +1,20 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { login } from "../../services/authService";
-import { setAuth } from "../../utils/auth";
+import { setAuth, isAuthenticated, getRole } from "../../utils/auth";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+
+  if (isAuthenticated()) {
+    const role = getRole();
+    if (role === "Admin") return <Navigate to="/admin/users" replace />;
+    if (role === "Beekeeper") return <Navigate to="/apiaries" replace />;
+    return <Navigate to="/parcels" replace />;
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();

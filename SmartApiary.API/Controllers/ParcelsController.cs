@@ -36,6 +36,7 @@ public class ParcelsController : ControllerBase
                 Name = p.Name,
                 Latitude = p.Latitude,
                 Longitude = p.Longitude,
+                AreaHectares = p.AreaHectares,
                 CurrentCrop = p.CurrentCrop == null ? null : new CropDto
                 {
                     Id = p.CurrentCrop.Id,
@@ -66,6 +67,7 @@ public class ParcelsController : ControllerBase
             Name = parcel.Name,
             Latitude = parcel.Latitude,
             Longitude = parcel.Longitude,
+            AreaHectares = parcel.AreaHectares,
             CurrentCrop = parcel.CurrentCrop == null ? null : new CropDto
             {
                 Id = parcel.CurrentCrop.Id,
@@ -87,6 +89,7 @@ public class ParcelsController : ControllerBase
             Name = request.Name,
             Latitude = request.Latitude,
             Longitude = request.Longitude,
+            AreaHectares = request.AreaHectares,
             FarmerId = CurrentUserId
         };
 
@@ -99,6 +102,7 @@ public class ParcelsController : ControllerBase
             Name = parcel.Name,
             Latitude = parcel.Latitude,
             Longitude = parcel.Longitude,
+            AreaHectares = parcel.AreaHectares,
             CreatedAt = parcel.CreatedAt
         });
     }
@@ -113,6 +117,7 @@ public class ParcelsController : ControllerBase
         parcel.Name = request.Name;
         parcel.Latitude = request.Latitude;
         parcel.Longitude = request.Longitude;
+        parcel.AreaHectares = request.AreaHectares;
         await _db.SaveChangesAsync();
         return NoContent();
     }
@@ -178,6 +183,7 @@ public class ParcelsController : ControllerBase
                 p.Name,
                 p.Latitude,
                 p.Longitude,
+                p.AreaHectares,
                 Crop = p.CurrentCrop == null ? null : new
                 {
                     p.CurrentCrop.CropType,
@@ -222,6 +228,7 @@ public class ParcelsController : ControllerBase
                 p.Name,
                 p.Latitude,
                 p.Longitude,
+                p.AreaHectares,
                 Crop = new
                 {
                     p.CurrentCrop!.CropType,

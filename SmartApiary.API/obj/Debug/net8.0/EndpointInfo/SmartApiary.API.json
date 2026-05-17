@@ -1644,6 +1644,11 @@
           "longitude": {
             "type": "number",
             "format": "double"
+          },
+          "areaHectares": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -1868,6 +1873,11 @@
           "longitude": {
             "type": "number",
             "format": "double"
+          },
+          "areaHectares": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
           }
         },
         "additionalProperties": false

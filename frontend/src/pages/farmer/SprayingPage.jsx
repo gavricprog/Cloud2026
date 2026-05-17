@@ -17,11 +17,14 @@ const statusBadge = { Scheduled: "badge-yellow", Completed: "badge-green", Cance
 export default function SprayingPage() {
   const [parcels, setParcels] = useState([]);
   const [announcements, setAnnouncements] = useState([]);
-  const [form, setForm] = useState({ parcelId: "", plannedStartTime: "", durationHours: 1, substanceType: "" });
+  const [form, setForm] = useState({ parcelId: "", plannedStartTime: "", durationHours: "", substanceType: "" });
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [weatherWarning, setWeatherWarning] = useState("");
   const [editing, setEditing] = useState(null);
   const [editForm, setEditForm] = useState({ plannedStartTime: "", durationHours: 1, substanceType: "" });
   const [editError, setEditError] = useState("");
+  const [editWeatherWarning, setEditWeatherWarning] = useState("");
   const [notificationModal, setNotificationModal] = useState(null);
   const [notificationLoading, setNotificationLoading] = useState(false);
 
@@ -38,13 +41,13 @@ export default function SprayingPage() {
   const handleCreate = async (e) => {
     e.preventDefault();
     setError("");
+    setSuccess("");
+    setWeatherWarning("");
     try {
       const res = await createAnnouncement({ ...form, durationHours: parseInt(form.durationHours, 10) });
-      alert(`Prskanje zakazano. Obavešteno pčelara: ${res.data.announcement.notifiedBeekeeperCount}`);
-      setForm({ parcelId: "", plannedStartTime: "", durationHours: 1, substanceType: "" });
-      if(res.data.weatherWarning){
-        alert(res.data.weatherWarning);
-      }
+      setSuccess(`Prskanje zakazano. Obavešteno pčelara: ${res.data.announcement.notifiedBeekeeperCount}`);
+      if (res.data.weatherWarning) setWeatherWarning(res.data.weatherWarning);
+      setForm({ parcelId: "", plannedStartTime: "", durationHours: "", substanceType: "" });
       load();
     } catch (err) {
       setError(err.response?.data?.message || "Greška pri zakazivanju prskanja.");
@@ -59,20 +62,26 @@ export default function SprayingPage() {
       substanceType: announcement.substanceType || "",
     });
     setEditError("");
+    setEditWeatherWarning("");
   };
 
   const handleUpdate = async (e) => {
     e.preventDefault();
     setEditError("");
+    setEditWeatherWarning("");
     try {
-      await updateAnnouncement(editing.id, {
+      const res = await updateAnnouncement(editing.id, {
         plannedStartTime: editForm.plannedStartTime,
         durationHours: parseInt(editForm.durationHours, 10),
         substanceType: editForm.substanceType || null,
       });
-      setEditing(null);
-      alert("Termin je pomeren. Obližnji pčelari su obavešteni o izmeni.");
-      load();
+      if (res.data?.weatherWarning) {
+        setEditWeatherWarning(res.data.weatherWarning);
+      } else {
+        setEditing(null);
+        setSuccess("Termin je pomeren. Obližnji pčelari su obavešteni o izmeni.");
+        load();
+      }
     } catch (err) {
       setEditError(err.response?.data?.message || "Greška pri izmeni termina.");
     }
@@ -100,6 +109,14 @@ export default function SprayingPage() {
       <div className="page-header">
         <h2>Najave prskanja</h2>
       </div>
+
+      {success && <div className="alert-success" style={{ marginBottom: 16 }}>{success}</div>}
+      {weatherWarning && (
+        <div className="alert-warning" style={{ marginBottom: 16 }}>
+          <strong>⚠️ Upozorenje o vremenskim uslovima</strong><br />
+          {weatherWarning}
+        </div>
+      )}
 
       <div className="card" style={{ marginBottom: 24 }}>
         <h3>Zakaži prskanje</h3>
@@ -130,7 +147,7 @@ export default function SprayingPage() {
             <input
               type="number"
               min="1"
-              placeholder="Trajanje (sati)"
+              placeholder="Trajanje u satima (npr. 3)"
               value={form.durationHours}
               onChange={(e) => setForm({ ...form, durationHours: e.target.value })}
               required
@@ -205,6 +222,12 @@ export default function SprayingPage() {
       {editing && (
         <Modal title={`Pomeri prskanje — ${editing.parcelName}`} onClose={() => setEditing(null)}>
           {editError && <div className="alert-error">{editError}</div>}
+          {editWeatherWarning && (
+            <div className="alert-warning">
+              <strong>⚠️ Upozorenje o vremenskim uslovima</strong><br />
+              {editWeatherWarning}
+            </div>
+          )}
           <form onSubmit={handleUpdate}>
             <div className="form-group">
               <label>Novi datum i vreme početka</label>

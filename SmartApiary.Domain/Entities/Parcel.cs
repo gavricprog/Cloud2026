@@ -6,6 +6,7 @@ public class Parcel
     public string Name { get; set; } = string.Empty;
     public double Latitude { get; set; }
     public double Longitude { get; set; }
+    public double? AreaHectares { get; set; }
     public Guid FarmerId { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 

@@ -5,9 +5,9 @@ import SmartMap from "../../components/SmartMap";
 
 export default function ParcelsPage() {
   const [parcels, setParcels] = useState([]);
-  const [form, setForm] = useState({ name: "", latitude: "", longitude: "" });
+  const [form, setForm] = useState({ name: "", latitude: "", longitude: "", areaHectares: "" });
   const [editingId, setEditingId] = useState(null);
-  const [editForm, setEditForm] = useState({ name: "", latitude: "", longitude: "" });
+  const [editForm, setEditForm] = useState({ name: "", latitude: "", longitude: "", areaHectares: "" });
   const [cropForm, setCropForm] = useState({ parcelId: null, cropType: CropTypes[0], bloomingPeriod: "", additionalInfo: "" });
 
   const load = useCallback(async () => {
@@ -25,8 +25,8 @@ export default function ParcelsPage() {
 
   const handleCreate = async (e) => {
     e.preventDefault();
-    await createParcel({ ...form, latitude: parseFloat(form.latitude), longitude: parseFloat(form.longitude) });
-    setForm({ name: "", latitude: "", longitude: "" });
+    await createParcel({ ...form, latitude: parseFloat(form.latitude), longitude: parseFloat(form.longitude), areaHectares: form.areaHectares ? parseFloat(form.areaHectares) : null });
+    setForm({ name: "", latitude: "", longitude: "", areaHectares: "" });
     load();
   };
 
@@ -36,6 +36,7 @@ export default function ParcelsPage() {
       name: p.name,
       latitude: p.latitude.toString(),
       longitude: p.longitude.toString(),
+      areaHectares: p.areaHectares?.toString() ?? "",
     });
   };
 
@@ -45,6 +46,7 @@ export default function ParcelsPage() {
       name: editForm.name,
       latitude: parseFloat(editForm.latitude),
       longitude: parseFloat(editForm.longitude),
+      areaHectares: editForm.areaHectares ? parseFloat(editForm.areaHectares) : null,
     });
     setEditingId(null);
     load();
@@ -89,6 +91,7 @@ export default function ParcelsPage() {
             <input placeholder="Naziv parcele" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required />
             <input placeholder="Geografska širina" value={form.latitude} onChange={(e) => setForm({ ...form, latitude: e.target.value })} required />
             <input placeholder="Geografska dužina" value={form.longitude} onChange={(e) => setForm({ ...form, longitude: e.target.value })} required />
+            <input type="number" placeholder="Površina (ha)" min="0" step="0.01" value={form.areaHectares} onChange={(e) => setForm({ ...form, areaHectares: e.target.value })} />
             <button type="submit" className="btn-primary">Dodaj parcelu</button>
           </div>
         </form>
@@ -104,7 +107,10 @@ export default function ParcelsPage() {
         {parcels.map((p) => (
           <div key={p.id} className="card">
             <div className="card-title">🌾 {p.name}</div>
-            <div className="card-meta">📍 {p.latitude}, {p.longitude}</div>
+            <div className="card-meta">
+              📍 {p.latitude}, {p.longitude}
+              {p.areaHectares && <><br />📐 {p.areaHectares} ha</>}
+            </div>
             {p.currentCrop ? (
               <div style={{ marginBottom: 12 }}>
                 <span className="badge badge-green">{p.currentCrop.cropType}</span>
@@ -116,14 +122,15 @@ export default function ParcelsPage() {
               <div style={{ marginBottom: 12, fontSize: 13, color: "var(--text-muted)" }}>Bez kulture</div>
             )}
             {editingId === p.id && (
-              <form onSubmit={handleUpdate} style={{ marginTop: 10 }}>
-                <div className="form-row">
+              <form onSubmit={handleUpdate} style={{ marginTop: 10, borderTop: "1px solid #e5e7eb", paddingTop: 10 }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
                   <input placeholder="Naziv" value={editForm.name} onChange={(e) => setEditForm({ ...editForm, name: e.target.value })} required />
                   <input placeholder="Geografska širina" value={editForm.latitude} onChange={(e) => setEditForm({ ...editForm, latitude: e.target.value })} required />
                   <input placeholder="Geografska dužina" value={editForm.longitude} onChange={(e) => setEditForm({ ...editForm, longitude: e.target.value })} required />
+                  <input type="number" placeholder="Površina (ha, opciono)" min="0" step="0.01" value={editForm.areaHectares} onChange={(e) => setEditForm({ ...editForm, areaHectares: e.target.value })} />
                 </div>
                 <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
-                  <button type="submit" className="btn-primary btn-sm">Sačuvaj koordinate</button>
+                  <button type="submit" className="btn-primary btn-sm">Sačuvaj</button>
                   <button type="button" className="btn-secondary btn-sm" onClick={() => setEditingId(null)}>Otkaži</button>
                 </div>
               </form>
@@ -133,29 +140,28 @@ export default function ParcelsPage() {
               {p.currentCrop ? (
                 <button type="button" className="btn-secondary btn-sm" onClick={() => deleteCrop(p.id).then(load)}>Ukloni kulturu</button>
               ) : (
-                <button type="button" className="btn-secondary btn-sm" onClick={() => setCropForm({ ...cropForm, parcelId: p.id })}>Dodaj kulturu</button>
+                <button type="button" className="btn-secondary btn-sm" onClick={() => setCropForm({ parcelId: p.id, cropType: CropTypes[0], bloomingPeriod: "", additionalInfo: "" })}>Dodaj kulturu</button>
               )}
             </div>
+
+            {cropForm.parcelId === p.id && (
+              <form onSubmit={handleSetCrop} style={{ marginTop: 12, borderTop: "1px solid #e5e7eb", paddingTop: 12 }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                  <select value={cropForm.cropType} onChange={(e) => setCropForm({ ...cropForm, cropType: e.target.value })}>
+                    {CropTypes.map((c) => <option key={c}>{c}</option>)}
+                  </select>
+                  <input placeholder="Period cvetanja" value={cropForm.bloomingPeriod} onChange={(e) => setCropForm({ ...cropForm, bloomingPeriod: e.target.value })} required />
+                  <input placeholder="Dodatne informacije" value={cropForm.additionalInfo} onChange={(e) => setCropForm({ ...cropForm, additionalInfo: e.target.value })} />
+                  <div style={{ display: "flex", gap: 8 }}>
+                    <button type="submit" className="btn-primary btn-sm">Sačuvaj</button>
+                    <button type="button" className="btn-secondary btn-sm" onClick={() => setCropForm({ parcelId: null, cropType: CropTypes[0], bloomingPeriod: "", additionalInfo: "" })}>Otkaži</button>
+                  </div>
+                </div>
+              </form>
+            )}
           </div>
         ))}
       </div>
-
-      {cropForm.parcelId && (
-        <div className="card" style={{ marginTop: 24 }}>
-          <h3>Dodaj kulturu</h3>
-          <form onSubmit={handleSetCrop}>
-            <div className="form-row">
-              <select value={cropForm.cropType} onChange={(e) => setCropForm({ ...cropForm, cropType: e.target.value })}>
-                {CropTypes.map((c) => <option key={c}>{c}</option>)}
-              </select>
-              <input placeholder="Period cvetanja" value={cropForm.bloomingPeriod} onChange={(e) => setCropForm({ ...cropForm, bloomingPeriod: e.target.value })} required />
-              <input placeholder="Dodatne informacije" value={cropForm.additionalInfo} onChange={(e) => setCropForm({ ...cropForm, additionalInfo: e.target.value })} />
-              <button type="submit" className="btn-primary">Sačuvaj</button>
-              <button type="button" className="btn-secondary" onClick={() => setCropForm({ parcelId: null, cropType: CropTypes[0], bloomingPeriod: "", additionalInfo: "" })}>Otkaži</button>
-            </div>
-          </form>
-        </div>
-      )}
     </div>
   );
 }

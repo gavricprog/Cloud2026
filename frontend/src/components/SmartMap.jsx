@@ -209,6 +209,12 @@ export default function SmartMap({
                         )}
                       </>
                     )}
+                    {marker.item.areaHectares && (
+                      <>
+                        <br />
+                        Površina: {marker.item.areaHectares} ha
+                      </>
+                    )}
                     {marker.item.ownerName && (
                       <>
                         <br />

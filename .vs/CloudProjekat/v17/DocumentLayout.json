@@ -1,41 +1,41 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "E:\\FAKS\\CLOUD\\Cloud2026\\",
+  "WorkspaceRootPath": "C:\\Users\\Bogdan\\Desktop\\marCloud\\Cloud2026\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{2ED490F1-A8B6-4D9F-8640-B72D2DDE6311}|SmartApiary.API\\SmartApiary.API.csproj|e:\\faks\\cloud\\cloud2026\\smartapiary.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{2ED490F1-A8B6-4D9F-8640-B72D2DDE6311}|SmartApiary.API\\SmartApiary.API.csproj|solutionrelative:smartapiary.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2ED490F1-A8B6-4D9F-8640-B72D2DDE6311}|SmartApiary.API\\SmartApiary.API.csproj|e:\\faks\\cloud\\cloud2026\\smartapiary.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{2ED490F1-A8B6-4D9F-8640-B72D2DDE6311}|SmartApiary.API\\SmartApiary.API.csproj|c:\\users\\bogdan\\desktop\\marcloud\\cloud2026\\smartapiary.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{2ED490F1-A8B6-4D9F-8640-B72D2DDE6311}|SmartApiary.API\\SmartApiary.API.csproj|solutionrelative:smartapiary.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{2ED490F1-A8B6-4D9F-8640-B72D2DDE6311}|SmartApiary.API\\SmartApiary.API.csproj|e:\\faks\\cloud\\cloud2026\\smartapiary.api\\controllers\\sprayingcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2ED490F1-A8B6-4D9F-8640-B72D2DDE6311}|SmartApiary.API\\SmartApiary.API.csproj|solutionrelative:smartapiary.api\\controllers\\sprayingcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{5853F06E-B89A-4D6A-A272-C7E633C286CD}|CloudProjekat\\CloudProjekat.csproj|e:\\faks\\cloud\\cloud2026\\cloudprojekat\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5853F06E-B89A-4D6A-A272-C7E633C286CD}|CloudProjekat\\CloudProjekat.csproj|solutionrelative:cloudprojekat\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2ED490F1-A8B6-4D9F-8640-B72D2DDE6311}|SmartApiary.API\\SmartApiary.API.csproj|e:\\faks\\cloud\\cloud2026\\smartapiary.api\\controllers\\profilecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{2ED490F1-A8B6-4D9F-8640-B72D2DDE6311}|SmartApiary.API\\SmartApiary.API.csproj|solutionrelative:smartapiary.api\\controllers\\profilecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{2ED490F1-A8B6-4D9F-8640-B72D2DDE6311}|SmartApiary.API\\SmartApiary.API.csproj|e:\\faks\\cloud\\cloud2026\\smartapiary.api\\controllers\\parcelscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{2ED490F1-A8B6-4D9F-8640-B72D2DDE6311}|SmartApiary.API\\SmartApiary.API.csproj|c:\\users\\bogdan\\desktop\\marcloud\\cloud2026\\smartapiary.api\\controllers\\parcelscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{2ED490F1-A8B6-4D9F-8640-B72D2DDE6311}|SmartApiary.API\\SmartApiary.API.csproj|solutionrelative:smartapiary.api\\controllers\\parcelscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{4A4B3EC1-F602-45D6-A899-2F1246BDFFE8}|SmartApiary.Domain\\SmartApiary.Domain.csproj|e:\\faks\\cloud\\cloud2026\\smartapiary.domain\\entities\\parcel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{2ED490F1-A8B6-4D9F-8640-B72D2DDE6311}|SmartApiary.API\\SmartApiary.API.csproj|c:\\users\\bogdan\\desktop\\marcloud\\cloud2026\\smartapiary.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{2ED490F1-A8B6-4D9F-8640-B72D2DDE6311}|SmartApiary.API\\SmartApiary.API.csproj|solutionrelative:smartapiary.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2ED490F1-A8B6-4D9F-8640-B72D2DDE6311}|SmartApiary.API\\SmartApiary.API.csproj|c:\\users\\bogdan\\desktop\\marcloud\\cloud2026\\smartapiary.api\\controllers\\sprayingcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2ED490F1-A8B6-4D9F-8640-B72D2DDE6311}|SmartApiary.API\\SmartApiary.API.csproj|solutionrelative:smartapiary.api\\controllers\\sprayingcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5853F06E-B89A-4D6A-A272-C7E633C286CD}|CloudProjekat\\CloudProjekat.csproj|c:\\users\\bogdan\\desktop\\marcloud\\cloud2026\\cloudprojekat\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5853F06E-B89A-4D6A-A272-C7E633C286CD}|CloudProjekat\\CloudProjekat.csproj|solutionrelative:cloudprojekat\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2ED490F1-A8B6-4D9F-8640-B72D2DDE6311}|SmartApiary.API\\SmartApiary.API.csproj|c:\\users\\bogdan\\desktop\\marcloud\\cloud2026\\smartapiary.api\\controllers\\profilecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2ED490F1-A8B6-4D9F-8640-B72D2DDE6311}|SmartApiary.API\\SmartApiary.API.csproj|solutionrelative:smartapiary.api\\controllers\\profilecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4A4B3EC1-F602-45D6-A899-2F1246BDFFE8}|SmartApiary.Domain\\SmartApiary.Domain.csproj|c:\\users\\bogdan\\desktop\\marcloud\\cloud2026\\smartapiary.domain\\entities\\parcel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{4A4B3EC1-F602-45D6-A899-2F1246BDFFE8}|SmartApiary.Domain\\SmartApiary.Domain.csproj|solutionrelative:smartapiary.domain\\entities\\parcel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5853F06E-B89A-4D6A-A272-C7E633C286CD}|CloudProjekat\\CloudProjekat.csproj|e:\\faks\\cloud\\cloud2026\\cloudprojekat\\host.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "AbsoluteMoniker": "D:0:0:{5853F06E-B89A-4D6A-A272-C7E633C286CD}|CloudProjekat\\CloudProjekat.csproj|c:\\users\\bogdan\\desktop\\marcloud\\cloud2026\\cloudprojekat\\host.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
       "RelativeMoniker": "D:0:0:{5853F06E-B89A-4D6A-A272-C7E633C286CD}|CloudProjekat\\CloudProjekat.csproj|solutionrelative:cloudprojekat\\host.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{4A4B3EC1-F602-45D6-A899-2F1246BDFFE8}|SmartApiary.Domain\\SmartApiary.Domain.csproj|e:\\faks\\cloud\\cloud2026\\smartapiary.domain\\enums\\alerttype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{4A4B3EC1-F602-45D6-A899-2F1246BDFFE8}|SmartApiary.Domain\\SmartApiary.Domain.csproj|c:\\users\\bogdan\\desktop\\marcloud\\cloud2026\\smartapiary.domain\\enums\\alerttype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{4A4B3EC1-F602-45D6-A899-2F1246BDFFE8}|SmartApiary.Domain\\SmartApiary.Domain.csproj|solutionrelative:smartapiary.domain\\enums\\alerttype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
@@ -46,77 +46,77 @@
       "DocumentGroups": [
         {
           "DockedHeight": 60,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 1,
               "Title": "ParcelsController.cs",
-              "DocumentMoniker": "E:\\FAKS\\CLOUD\\Cloud2026\\SmartApiary.API\\Controllers\\ParcelsController.cs",
+              "DocumentMoniker": "C:\\Users\\Bogdan\\Desktop\\marCloud\\Cloud2026\\SmartApiary.API\\Controllers\\ParcelsController.cs",
               "RelativeDocumentMoniker": "SmartApiary.API\\Controllers\\ParcelsController.cs",
-              "ToolTip": "E:\\FAKS\\CLOUD\\Cloud2026\\SmartApiary.API\\Controllers\\ParcelsController.cs",
+              "ToolTip": "C:\\Users\\Bogdan\\Desktop\\marCloud\\Cloud2026\\SmartApiary.API\\Controllers\\ParcelsController.cs",
               "RelativeToolTip": "SmartApiary.API\\Controllers\\ParcelsController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAALAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAiAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-16T22:25:16.539Z"
+              "WhenOpened": "2026-05-16T22:25:16.539Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 6,
               "Title": "Parcel.cs",
-              "DocumentMoniker": "E:\\FAKS\\CLOUD\\Cloud2026\\SmartApiary.Domain\\Entities\\Parcel.cs",
+              "DocumentMoniker": "C:\\Users\\Bogdan\\Desktop\\marCloud\\Cloud2026\\SmartApiary.Domain\\Entities\\Parcel.cs",
               "RelativeDocumentMoniker": "SmartApiary.Domain\\Entities\\Parcel.cs",
-              "ToolTip": "E:\\FAKS\\CLOUD\\Cloud2026\\SmartApiary.Domain\\Entities\\Parcel.cs",
+              "ToolTip": "C:\\Users\\Bogdan\\Desktop\\marCloud\\Cloud2026\\SmartApiary.Domain\\Entities\\Parcel.cs",
               "RelativeToolTip": "SmartApiary.Domain\\Entities\\Parcel.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAtAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAtAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-05-16T22:00:28.873Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "SprayingController.cs",
-              "DocumentMoniker": "E:\\FAKS\\CLOUD\\Cloud2026\\SmartApiary.API\\Controllers\\SprayingController.cs",
+              "DocumentMoniker": "C:\\Users\\Bogdan\\Desktop\\marCloud\\Cloud2026\\SmartApiary.API\\Controllers\\SprayingController.cs",
               "RelativeDocumentMoniker": "SmartApiary.API\\Controllers\\SprayingController.cs",
-              "ToolTip": "E:\\FAKS\\CLOUD\\Cloud2026\\SmartApiary.API\\Controllers\\SprayingController.cs",
+              "ToolTip": "C:\\Users\\Bogdan\\Desktop\\marCloud\\Cloud2026\\SmartApiary.API\\Controllers\\SprayingController.cs",
               "RelativeToolTip": "SmartApiary.API\\Controllers\\SprayingController.cs",
-              "ViewState": "AgIAAAwAAAAAAAAAAAAAABQAAAAmAAAAAAAAAA==",
+              "ViewState": "AgIAAAYAAAAAAAAAAIBZwBQAAAAmAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-05-16T21:56:13.525Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "appsettings.json",
-              "DocumentMoniker": "E:\\FAKS\\CLOUD\\Cloud2026\\SmartApiary.API\\appsettings.json",
+              "DocumentMoniker": "C:\\Users\\Bogdan\\Desktop\\marCloud\\Cloud2026\\SmartApiary.API\\appsettings.json",
               "RelativeDocumentMoniker": "SmartApiary.API\\appsettings.json",
-              "ToolTip": "E:\\FAKS\\CLOUD\\Cloud2026\\SmartApiary.API\\appsettings.json",
+              "ToolTip": "C:\\Users\\Bogdan\\Desktop\\marCloud\\Cloud2026\\SmartApiary.API\\appsettings.json",
               "RelativeToolTip": "SmartApiary.API\\appsettings.json",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAlAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2026-05-16T21:20:39.363Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-16T21:20:39.363Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "Program.cs",
-              "DocumentMoniker": "E:\\FAKS\\CLOUD\\Cloud2026\\SmartApiary.API\\Program.cs",
+              "DocumentMoniker": "C:\\Users\\Bogdan\\Desktop\\marCloud\\Cloud2026\\SmartApiary.API\\Program.cs",
               "RelativeDocumentMoniker": "SmartApiary.API\\Program.cs",
-              "ToolTip": "E:\\FAKS\\CLOUD\\Cloud2026\\SmartApiary.API\\Program.cs",
+              "ToolTip": "C:\\Users\\Bogdan\\Desktop\\marCloud\\Cloud2026\\SmartApiary.API\\Program.cs",
               "RelativeToolTip": "SmartApiary.API\\Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAFMAAAAEAAAAAAAAAA==",
+              "ViewState": "AgIAAEsAAAAAAAAAAAAAAFUAAAAaAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-05-16T22:35:41.667Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "ProfileController.cs",
-              "DocumentMoniker": "E:\\FAKS\\CLOUD\\Cloud2026\\SmartApiary.API\\Controllers\\ProfileController.cs",
+              "DocumentMoniker": "C:\\Users\\Bogdan\\Desktop\\marCloud\\Cloud2026\\SmartApiary.API\\Controllers\\ProfileController.cs",
               "RelativeDocumentMoniker": "SmartApiary.API\\Controllers\\ProfileController.cs",
-              "ToolTip": "E:\\FAKS\\CLOUD\\Cloud2026\\SmartApiary.API\\Controllers\\ProfileController.cs",
+              "ToolTip": "C:\\Users\\Bogdan\\Desktop\\marCloud\\Cloud2026\\SmartApiary.API\\Controllers\\ProfileController.cs",
               "RelativeToolTip": "SmartApiary.API\\Controllers\\ProfileController.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAALAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -124,11 +124,11 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "Program.cs",
-              "DocumentMoniker": "E:\\FAKS\\CLOUD\\Cloud2026\\CloudProjekat\\Program.cs",
+              "DocumentMoniker": "C:\\Users\\Bogdan\\Desktop\\marCloud\\Cloud2026\\CloudProjekat\\Program.cs",
               "RelativeDocumentMoniker": "CloudProjekat\\Program.cs",
-              "ToolTip": "E:\\FAKS\\CLOUD\\Cloud2026\\CloudProjekat\\Program.cs",
+              "ToolTip": "C:\\Users\\Bogdan\\Desktop\\marCloud\\Cloud2026\\CloudProjekat\\Program.cs",
               "RelativeToolTip": "CloudProjekat\\Program.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -138,9 +138,9 @@
               "$type": "Document",
               "DocumentIndex": 7,
               "Title": "host.json",
-              "DocumentMoniker": "E:\\FAKS\\CLOUD\\Cloud2026\\CloudProjekat\\host.json",
+              "DocumentMoniker": "C:\\Users\\Bogdan\\Desktop\\marCloud\\Cloud2026\\CloudProjekat\\host.json",
               "RelativeDocumentMoniker": "CloudProjekat\\host.json",
-              "ToolTip": "E:\\FAKS\\CLOUD\\Cloud2026\\CloudProjekat\\host.json",
+              "ToolTip": "C:\\Users\\Bogdan\\Desktop\\marCloud\\Cloud2026\\CloudProjekat\\host.json",
               "RelativeToolTip": "CloudProjekat\\host.json",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
@@ -150,23 +150,13 @@
               "$type": "Document",
               "DocumentIndex": 8,
               "Title": "AlertType.cs",
-              "DocumentMoniker": "E:\\FAKS\\CLOUD\\Cloud2026\\SmartApiary.Domain\\Enums\\AlertType.cs",
+              "DocumentMoniker": "C:\\Users\\Bogdan\\Desktop\\marCloud\\Cloud2026\\SmartApiary.Domain\\Enums\\AlertType.cs",
               "RelativeDocumentMoniker": "SmartApiary.Domain\\Enums\\AlertType.cs",
-              "ToolTip": "E:\\FAKS\\CLOUD\\Cloud2026\\SmartApiary.Domain\\Enums\\AlertType.cs",
+              "ToolTip": "C:\\Users\\Bogdan\\Desktop\\marCloud\\Cloud2026\\SmartApiary.Domain\\Enums\\AlertType.cs",
               "RelativeToolTip": "SmartApiary.Domain\\Enums\\AlertType.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-05-16T20:41:07.645Z"
-            }
-          ]
-        },
-        {
-          "DockedHeight": 60,
-          "SelectedChildIndex": -1,
-          "Children": [
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{0ad07096-bba9-4900-a651-0598d26f6d24}"
             }
           ]
         }
