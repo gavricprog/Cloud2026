@@ -99,45 +99,63 @@ export default function HiveDiaryPage() {
         <h3>Novi zapis</h3>
         <form onSubmit={handleCreate}>
           <div className="form-row">
-            <input
-              type="datetime-local"
-              value={form.inspectionDate}
-              onChange={(e) => setForm({ ...form, inspectionDate: e.target.value })}
-              required
-            />
-            <input
-              placeholder="Boja podnjače"
-              value={form.floorColor}
-              onChange={(e) => setForm({ ...form, floorColor: e.target.value })}
-              required
-            />
-            <input
-              type="number"
-              placeholder="Ramovi sa medom"
-              min="0"
-              value={form.honeyFrames}
-              onChange={(e) => setForm({ ...form, honeyFrames: e.target.value })}
-            />
-            <input
-              type="number"
-              placeholder="Med (kg)"
-              min="0"
-              step="0.1"
-              value={form.honeyAmount}
-              onChange={(e) => setForm({ ...form, honeyAmount: e.target.value })}
-            />
-            <input
-              type="number"
-              placeholder="Ramovi sa leglom"
-              min="0"
-              value={form.broodFrames}
-              onChange={(e) => setForm({ ...form, broodFrames: e.target.value })}
-            />
-            <input
-              placeholder="Napomena"
-              value={form.notes}
-              onChange={(e) => setForm({ ...form, notes: e.target.value })}
-            />
+            <div className="form-group">
+              <label>Datum i vreme pregleda</label>
+              <input
+                type="datetime-local"
+                value={form.inspectionDate}
+                onChange={(e) => setForm({ ...form, inspectionDate: e.target.value })}
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label>Boja podnjače</label>
+              <input
+                placeholder="npr. Plava"
+                value={form.floorColor}
+                onChange={(e) => setForm({ ...form, floorColor: e.target.value })}
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label>Ramovi sa medom</label>
+              <input
+                type="number"
+                placeholder="0"
+                min="0"
+                value={form.honeyFrames}
+                onChange={(e) => setForm({ ...form, honeyFrames: e.target.value })}
+              />
+            </div>
+            <div className="form-group">
+              <label>Med (kg)</label>
+              <input
+                type="number"
+                placeholder="0.0"
+                min="0"
+                step="0.1"
+                value={form.honeyAmount}
+                onChange={(e) => setForm({ ...form, honeyAmount: e.target.value })}
+              />
+            </div>
+            <div className="form-group">
+              <label>Ramovi sa leglom</label>
+              <input
+                type="number"
+                placeholder="0"
+                min="0"
+                value={form.broodFrames}
+                onChange={(e) => setForm({ ...form, broodFrames: e.target.value })}
+              />
+            </div>
+            <div className="form-group">
+              <label>Napomena (opciono)</label>
+              <input
+                placeholder="Unesi napomenu..."
+                value={form.notes}
+                onChange={(e) => setForm({ ...form, notes: e.target.value })}
+              />
+            </div>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
             <label style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 14 }}>

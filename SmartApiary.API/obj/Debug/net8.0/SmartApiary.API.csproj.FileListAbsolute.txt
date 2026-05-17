@@ -686,5 +686,5 @@ C:\Users\Bogdan\Desktop\marCloud\Cloud2026\SmartApiary.API\obj\Debug\net8.0\Smar
 C:\Users\Bogdan\Desktop\marCloud\Cloud2026\SmartApiary.API\obj\Debug\net8.0\SmartApiary.API.genruntimeconfig.cache
 C:\Users\Bogdan\Desktop\marCloud\Cloud2026\SmartApiary.API\obj\Debug\net8.0\ref\SmartApiary.API.dll
 C:\Users\Bogdan\Desktop\marCloud\Cloud2026\SmartApiary.API\bin\Debug\net8.0\SmartApiary.API.staticwebassets.runtime.json
-C:\Users\Bogdan\Desktop\marCloud\Cloud2026\SmartApiary.API\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
 C:\Users\Bogdan\Desktop\marCloud\Cloud2026\SmartApiary.API\bin\Debug\net8.0\Azure.Data.Tables.dll
+C:\Users\Bogdan\Desktop\marCloud\Cloud2026\SmartApiary.API\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

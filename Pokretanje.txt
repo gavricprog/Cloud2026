@@ -24,6 +24,10 @@ Provjera da li radi (u browseru):
   http://127.0.0.1:10002/devstoreaccount1
   (ako vrati XML = radi)
 
+--SIMULATOR--
+
+cd IoTSimulator
+dotnet run
 
 --- BACKEND ---
 

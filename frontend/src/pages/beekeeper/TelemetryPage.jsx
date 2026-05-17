@@ -1,46 +1,115 @@
-import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import * as signalR from "@microsoft/signalr";
 import {
-  BarChart,
-  Bar,
-  Cell,
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-  ReferenceLine,
+  BarChart, Bar, Cell, LineChart, Line,
+  XAxis, YAxis, CartesianGrid, Tooltip, Legend,
+  ResponsiveContainer, ReferenceLine,
 } from "recharts";
+import { getApiaries } from "../../services/apiaryService";
 import { getTelemetryCharts } from "../../services/telemetryService";
 
+const HUB_URL = import.meta.env.VITE_API_URL
+  ? import.meta.env.VITE_API_URL.replace(/\/api$/, "") + "/hubs/telemetry"
+  : "https://localhost:7014/hubs/telemetry";
+
 export default function TelemetryPage() {
-  const { apiaryId } = useParams();
+  const [apiaries, setApiaries] = useState([]);
+  const [activeId, setActiveId] = useState(null);
   const [data, setData] = useState(null);
   const [days, setDays] = useState(7);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const connectionRef = useRef(null);
+  const activeIdRef = useRef(null);
   const navigate = useNavigate();
 
+  // Učitaj pčelinjake
   useEffect(() => {
-    load();
-  }, [apiaryId, days]);
+    getApiaries().then((res) => {
+      setApiaries(res.data);
+      if (res.data.length > 0) setActiveId(res.data[0].id);
+    });
+  }, []);
 
-  const load = async () => {
+  // Učitaj telemetriju kad se promijeni aktivan tab ili broj dana
+  useEffect(() => {
+    if (!activeId) return;
+    loadTelemetry();
+  }, [activeId, days]);
+
+  const loadTelemetry = async () => {
     try {
       setLoading(true);
       setError("");
-
-      const res = await getTelemetryCharts(apiaryId, days);
+      const res = await getTelemetryCharts(activeId, days);
       setData(res.data);
-    } catch (err) {
-      console.error(err);
+    } catch {
       setError("Greška pri učitavanju telemetrije.");
     } finally {
       setLoading(false);
     }
+  };
+
+  // SignalR — konekcija i Join/Leave po tabu
+  useEffect(() => {
+    const connection = new signalR.HubConnectionBuilder()
+      .withUrl(HUB_URL, { withCredentials: false })
+      .withAutomaticReconnect()
+      .build();
+
+    connection.on("TelemetryUpdate", (reading) => {
+      setData((prev) => {
+        if (!prev) return prev;
+        const updatedReadings = [...(prev.temperatureHumidity || []), reading];
+        return {
+          ...prev,
+          latestReading: reading,
+          temperatureHumidity: updatedReadings,
+        };
+      });
+    });
+
+    connection.start().then(() => {
+      connectionRef.current = connection;
+      if (activeIdRef.current) {
+        connection.invoke("JoinApiary", activeIdRef.current);
+      }
+    }).catch(() => {
+      // SignalR nije dostupan — ne blokira stranicu
+    });
+
+    return () => {
+      if (connectionRef.current) {
+        if (activeIdRef.current) {
+          connectionRef.current.invoke("LeaveApiary", activeIdRef.current).catch(() => {});
+        }
+        connectionRef.current.stop();
+        connectionRef.current = null;
+      }
+    };
+  }, []);
+
+  // Join/Leave pri promjeni taba
+  useEffect(() => {
+    const conn = connectionRef.current;
+    if (!conn || conn.state !== signalR.HubConnectionState.Connected) {
+      activeIdRef.current = activeId;
+      return;
+    }
+    const prev = activeIdRef.current;
+    if (prev && prev !== activeId) {
+      conn.invoke("LeaveApiary", prev).catch(() => {});
+    }
+    if (activeId) {
+      conn.invoke("JoinApiary", activeId).catch(() => {});
+    }
+    activeIdRef.current = activeId;
+  }, [activeId]);
+
+  const switchTab = (id) => {
+    setActiveId(id);
+    setData(null);
   };
 
   const dailyNectarData =
@@ -52,10 +121,7 @@ export default function TelemetryPage() {
   const temperatureHumidityData =
     data?.temperatureHumidity?.map((item) => ({
       time: new Date(item.recordedAt).toLocaleString("sr-RS", {
-        day: "2-digit",
-        month: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit",
+        day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit",
       }),
       temperature: item.internalTemperature,
       humidity: item.humidity,
@@ -67,16 +133,37 @@ export default function TelemetryPage() {
 
   return (
     <div style={{ padding: 24 }}>
-      <button onClick={() => navigate("/apiaries")}>← Nazad</button>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+        <h2 style={{ margin: 0 }}>Telemetrija pčelinjaka</h2>
+        <button onClick={() => navigate("/apiaries")} className="btn-secondary btn-sm">← Nazad</button>
+      </div>
 
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 16 }}>
-        <div>
-          <h2>Telemetrija pčelinjaka</h2>
-          <p style={{ color: "#666", marginTop: 4 }}>
-            Pregled dnevnog prinosa, temperature, vlažnosti i poslednjeg stanja uređaja.
-          </p>
+      {/* Tabovi */}
+      {apiaries.length > 1 && (
+        <div style={{ display: "flex", gap: 8, marginBottom: 20, borderBottom: "2px solid #eee", paddingBottom: 0 }}>
+          {apiaries.map((a) => (
+            <button
+              key={a.id}
+              type="button"
+              onClick={() => switchTab(a.id)}
+              style={{
+                padding: "8px 18px",
+                border: "none",
+                borderBottom: activeId === a.id ? "3px solid #f59e0b" : "3px solid transparent",
+                background: "none",
+                fontWeight: activeId === a.id ? 700 : 400,
+                cursor: "pointer",
+                fontSize: 14,
+                color: activeId === a.id ? "#f59e0b" : "#555",
+              }}
+            >
+              🏡 {a.name}
+            </button>
+          ))}
         </div>
+      )}
 
+      <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 16 }}>
         <select value={days} onChange={(e) => setDays(Number(e.target.value))}>
           <option value={7}>7 dana</option>
           <option value={14}>14 dana</option>
@@ -86,10 +173,6 @@ export default function TelemetryPage() {
 
       {loading && <p>Učitavanje telemetrije...</p>}
       {error && <div className="alert-error">{error}</div>}
-
-      {!loading && !error && !data && (
-        <p>Nema podataka za prikaz.</p>
-      )}
 
       {!loading && !error && data && (
         <>
@@ -114,10 +197,7 @@ export default function TelemetryPage() {
                   <ReferenceLine y={0} stroke="#000" />
                   <Bar dataKey="delta" name="Prinos / potrošnja">
                     {dailyNectarData.map((entry, index) => (
-                      <Cell
-                        key={`cell-${index}`}
-                        fill={entry.delta >= 0 ? "#4caf50" : "#f44336"}
-                      />
+                      <Cell key={`cell-${index}`} fill={entry.delta >= 0 ? "#4caf50" : "#f44336"} />
                     ))}
                   </Bar>
                 </BarChart>
@@ -136,44 +216,26 @@ export default function TelemetryPage() {
                   <YAxis />
                   <Tooltip />
                   <Legend />
-                  <Line
-                    type="monotone"
-                    dataKey="temperature"
-                    name="Temperatura (°C)"
-                    stroke="#ff7300"
-                    strokeWidth={2}
-                    dot={false}
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="humidity"
-                    name="Vlažnost (%)"
-                    stroke="#387908"
-                    strokeWidth={2}
-                    dot={false}
-                  />
+                  <Line type="monotone" dataKey="temperature" name="Temperatura (°C)" stroke="#ff7300" strokeWidth={2} dot={false} />
+                  <Line type="monotone" dataKey="humidity" name="Vlažnost (%)" stroke="#387908" strokeWidth={2} dot={false} />
                 </LineChart>
               </ResponsiveContainer>
             )}
           </ChartCard>
         </>
       )}
+
+      {!loading && !error && !data && <p>Nema podataka za prikaz.</p>}
     </div>
   );
 }
 
 function StatusCard({ title, value }) {
   return (
-    <div
-      style={{
-        border: "1px solid #ddd",
-        borderRadius: 12,
-        padding: 16,
-        minWidth: 180,
-        background: "#fff",
-        boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
-      }}
-    >
+    <div style={{
+      border: "1px solid #ddd", borderRadius: 12, padding: 16,
+      minWidth: 180, background: "#fff", boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+    }}>
       <div style={{ color: "#666", fontSize: 14 }}>{title}</div>
       <div style={{ fontSize: 24, fontWeight: 700, marginTop: 8 }}>{value}</div>
     </div>
@@ -182,16 +244,10 @@ function StatusCard({ title, value }) {
 
 function ChartCard({ title, children }) {
   return (
-    <div
-      style={{
-        border: "1px solid #ddd",
-        borderRadius: 12,
-        padding: 20,
-        marginTop: 20,
-        background: "#fff",
-        boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
-      }}
-    >
+    <div style={{
+      border: "1px solid #ddd", borderRadius: 12, padding: 20,
+      marginTop: 20, background: "#fff", boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+    }}>
       <h3 style={{ marginTop: 0 }}>{title}</h3>
       {children}
     </div>

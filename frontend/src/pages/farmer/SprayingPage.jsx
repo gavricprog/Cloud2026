@@ -80,8 +80,8 @@ export default function SprayingPage() {
       } else {
         setEditing(null);
         setSuccess("Termin je pomeren. Obližnji pčelari su obavešteni o izmeni.");
-        load();
       }
+      load();
     } catch (err) {
       setEditError(err.response?.data?.message || "Greška pri izmeni termina.");
     }
@@ -226,6 +226,9 @@ export default function SprayingPage() {
             <div className="alert-warning">
               <strong>⚠️ Upozorenje o vremenskim uslovima</strong><br />
               {editWeatherWarning}
+              <div style={{ marginTop: 12, display: "flex", justifyContent: "flex-end" }}>
+                <button type="button" className="btn-secondary" onClick={() => setEditing(null)}>Zatvori</button>
+              </div>
             </div>
           )}
           <form onSubmit={handleUpdate}>

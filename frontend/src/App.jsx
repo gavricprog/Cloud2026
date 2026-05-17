@@ -39,8 +39,10 @@ function NavBar() {
       <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
         {user.role === Roles.Beekeeper && (
           <>
-            <button type="button" className="btn-secondary btn-sm" onClick={() => setSettingsOpen(true)}>⚙ Podešavanja</button>
+            <button type="button" className="btn-secondary btn-sm" onClick={() => navigate("/apiaries")}>🏡 Pčelinjaci</button>
+            <button type="button" className="btn-secondary btn-sm" onClick={() => navigate("/telemetry")}>📊 Telemetrija</button>
             <button type="button" className="btn-secondary btn-sm" onClick={() => navigate("/alerts")}>🔔 Upozorenja</button>
+            <button type="button" className="btn-secondary btn-sm" onClick={() => setSettingsOpen(true)}>⚙ Podešavanja</button>
           </>
         )}
         {user.role === Roles.Farmer && (
@@ -83,6 +85,9 @@ export default function App() {
         } />
         <Route path="/apiaries/:apiaryId/hives/:hiveId/diary" element={
           <ProtectedRoute roles={[Roles.Beekeeper]}><HiveDiaryPage /></ProtectedRoute>
+        } />
+        <Route path="/telemetry" element={
+          <ProtectedRoute roles={[Roles.Beekeeper]}><TelemetryPage /></ProtectedRoute>
         } />
         <Route path="/apiaries/:apiaryId/telemetry" element={
           <ProtectedRoute roles={[Roles.Beekeeper]}><TelemetryPage /></ProtectedRoute>
