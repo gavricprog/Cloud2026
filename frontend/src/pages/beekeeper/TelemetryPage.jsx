@@ -20,8 +20,11 @@ export default function TelemetryPage() {
   const [days, setDays] = useState(7);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [signalRStatus, setSignalRStatus] = useState("Povezivanje...");
+  const [lastUpdatedAt, setLastUpdatedAt] = useState(null);
   const connectionRef = useRef(null);
   const activeIdRef = useRef(null);
+  const refreshTimeoutRef = useRef(null);
   const navigate = useNavigate();
 
   // Učitaj pčelinjake
@@ -35,21 +38,33 @@ export default function TelemetryPage() {
   // Učitaj telemetriju kad se promijeni aktivan tab ili broj dana
   useEffect(() => {
     if (!activeId) return;
-    loadTelemetry();
+
+    activeIdRef.current = activeId;
+    loadTelemetry(activeId, days);
   }, [activeId, days]);
 
-  const loadTelemetry = async () => {
+  const loadTelemetry = async (apiaryId = activeId, selectedDays = days, showLoading = true) => {
+    if (!apiaryId) return;
+
     try {
-      setLoading(true);
-      setError("");
-      const res = await getTelemetryCharts(activeId, days);
-      setData(res.data);
-    } catch {
-      setError("Greška pri učitavanju telemetrije.");
-    } finally {
+      if (showLoading) {
+        setLoading(true);
+      }
+
+    setError("");
+
+    const res = await getTelemetryCharts(apiaryId, selectedDays);
+    setData(res.data);
+    setLastUpdatedAt(new Date());
+  } catch (err) {
+    console.error("Greška pri učitavanju telemetrije:", err);
+    setError("Greška pri učitavanju telemetrije.");
+  } finally {
+    if (showLoading) {
       setLoading(false);
     }
-  };
+  }
+};
 
   // SignalR — konekcija i Join/Leave po tabu
   useEffect(() => {
@@ -58,35 +73,47 @@ export default function TelemetryPage() {
       .withAutomaticReconnect()
       .build();
 
-    connection.on("TelemetryUpdate", (reading) => {
-      setData((prev) => {
-        if (!prev) return prev;
-        const updatedReadings = [...(prev.temperatureHumidity || []), reading];
-        return {
-          ...prev,
-          latestReading: reading,
-          temperatureHumidity: updatedReadings,
-        };
-      });
+    connection.on("TelemetryUpdate", () => {
+      if (refreshTimeoutRef.current) {
+        clearTimeout(refreshTimeoutRef.current);
+      }
+
+      refreshTimeoutRef.current = setTimeout(() => {
+        const currentApiaryId = activeIdRef.current;
+
+        if (currentApiaryId) {
+          loadTelemetry(currentApiaryId, days, false);
+        }
+      }, 300);
     });
 
     connection.start().then(() => {
       connectionRef.current = connection;
+      setSignalRStatus("Real-time povezan");
+
       if (activeIdRef.current) {
         connection.invoke("JoinApiary", activeIdRef.current);
       }
     }).catch(() => {
-      // SignalR nije dostupan — ne blokira stranicu
+      setSignalRStatus("Real-time nije dostupan");
     });
 
+    connection.onreconnecting(() => setSignalRStatus("Ponovno povezivanje..."));
+    connection.onreconnected(() => setSignalRStatus("Real-time povezan"));
+    connection.onclose(() => setSignalRStatus("Real-time prekinut"));
+
     return () => {
+      if (refreshTimeoutRef.current) {
+        clearTimeout(refreshTimeoutRef.current);
+      }
+
       if (connectionRef.current) {
         if (activeIdRef.current) {
           connectionRef.current.invoke("LeaveApiary", activeIdRef.current).catch(() => {});
         }
-        connectionRef.current.stop();
-        connectionRef.current = null;
-      }
+      connectionRef.current.stop();
+      connectionRef.current = null;
+    }
     };
   }, []);
 
@@ -163,7 +190,21 @@ export default function TelemetryPage() {
         </div>
       )}
 
-      <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 16 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+        <div style={{ color: "#666", fontSize: 14 }}>
+          <span>{signalRStatus}</span>
+          {lastUpdatedAt && (
+            <span>
+              {" "}· Poslednje osvežavanje:{" "}
+              {lastUpdatedAt.toLocaleTimeString("sr-RS", {
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+              })}
+            </span>
+          )}
+        </div>
+
         <select value={days} onChange={(e) => setDays(Number(e.target.value))}>
           <option value={7}>7 dana</option>
           <option value={14}>14 dana</option>
