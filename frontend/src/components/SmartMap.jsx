@@ -4,7 +4,7 @@ import L from "leaflet";
 import { cropMarkerHtml } from "../utils/cropIcons";
 
 const DEFAULT_CENTER = [44.0165, 21.0059];
-const DEFAULT_ZOOM = 7;
+const DEFAULT_ZOOM = 8;
 
 const defaultApiaryIcon = L.divIcon({
   className: "map-marker map-marker-apiary",
@@ -30,12 +30,14 @@ const selectedIcon = L.divIcon({
   popupAnchor: [0, -30],
 });
 
+// Cache generated marker icons to improve map rendering performance
 const iconCache = new Map();
-
+// Validate coordinates before rendering markers on the map
 function isValidCoordinate(latitude, longitude) {
   return Number.isFinite(latitude) && Number.isFinite(longitude);
 }
 
+// Generate custom marker icons for apiaries
 function getApiaryIcon(apiary) {
   if (apiary.thumbnailUrl) {
     const key = `thumb-${apiary.thumbnailUrl}`;
@@ -56,6 +58,7 @@ function getApiaryIcon(apiary) {
   return defaultApiaryIcon;
 }
 
+// Render crop-specific parcel markers with dynamic styling
 function getParcelIcon(parcel, selectedParcelId, useCropIcons) {
   const crop = parcel.currentCrop || parcel.crop;
   const selected = selectedParcelId && parcel.id === selectedParcelId;
@@ -78,6 +81,7 @@ function getParcelIcon(parcel, selectedParcelId, useCropIcons) {
   return parcelFallbackIcon;
 }
 
+// Automatically fit map bounds based on active markers
 function FitMapBounds({ points }) {
   const map = useMap();
 
@@ -93,6 +97,7 @@ function FitMapBounds({ points }) {
   return null;
 }
 
+// Allow users to select locations directly from the map
 function LocationPicker({ onSelect }) {
   useMapEvents({
     click(event) {
@@ -119,6 +124,7 @@ export default function SmartMap({
   useCropIcons = true,
   height = 420,
 }) {
+  // Memoize map markers to avoid unnecessary re-renders
   const markers = useMemo(() => {
     const apiaryMarkers = apiaries
       .map((apiary) => ({
